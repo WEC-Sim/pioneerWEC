@@ -1,0 +1,12 @@
+wec_and_NSIF.frc
+1 0 1 0 0 0 0 0 0                   IOPTN(1-9)
+0                           VCG(1)
+0.0 0.0 0.0
+0.0 0.0 0.0
+0.0 0.0 0.0                XPRDCT
+0                           VCG(2)
+0.0 0.0 0.0
+0.0 0.0 0.0
+0.0 0.0 0.0                XPRDCT
+0                          NBETAH
+0                          NFIELD
