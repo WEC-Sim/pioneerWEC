@@ -7,21 +7,25 @@ wecSimSource = fullfile('../WEC-Sim/source');
 addpath(genpath(wecSimSource));
 clear wecSimSource
 
-%%
-load('./realData_Jantzen/processedDataStd.mat');
+% %%
+% load('./realData_Jantzen/processedDataStd.mat');
 
-heights = [processedData(:).Hm0]';
-periods = [processedData(:).Tp]';
+waveFiles = {'obsData/spectrumFile202.mat' 'obsData/spectrumFile313.mat' 'obsData/spectrumFile349.mat' 'obsData/spectrumFile419.mat'};
+waveDirs = [240.9309   48.4308  107.6652  108.3043];
+
+for i = 1:length(waveFiles)
+    waveFiles = string(waveFiles);
+end
 
 mcr = struct();
-mcr.header = ["waves.height", "waves.period"];
-mcr.cases = [heights, periods];
+mcr.header = ["waves.spectrumFile", "waves.direction"];
+mcr.cases = [waveFiles', waveDirs'];
 
 save mcrCases mcr
 
 wecSimPCT
 
 postProcessPCT
-
-load('./realData_Jantzen/processedDataStd.mat');
-postProcess
+% 
+% load('./realData_Jantzen/processedDataStd.mat');
+% postProcess

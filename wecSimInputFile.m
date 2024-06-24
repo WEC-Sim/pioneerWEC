@@ -5,24 +5,54 @@ simu.simMechanicsFile = 'pioneerSNL.slx';
 simu.mode      = 'normal';                   % Specify Simulation Mode ('normal','accelerator','rapid-accelerator')
 simu.explorer  = 'on';                       % Turn SimMechanics Explorer (on/off)
 simu.startTime = 0;                          % Simulation Start Time [s]
-simu.endTime   = 150;                      % Simulation End Time [s]
-simu.rampTime  = 0.01*simu.endTime;           % Wave Ramp Time [s]
+simu.endTime   = 1300;                      % Simulation End Time [s]
+simu.rampTime  = 0.05*simu.endTime;           % Wave Ramp Time [s]
 %%% Note from Dom: ode23t or other mod stiff tends to work better with the inverse trig
 %%% functions in custom mooring and the cable approximation. 
-simu.solver    = 'ode45';                    % simu.solver = 'ode4' for fixed step & simu.solver = 'ode45' for variable step 
+simu.solver    = 'ode23t';                    % simu.solver = 'ode4' for fixed step & simu.solver = 'ode45' for variable step 
 simu.dt        = 0.05; 					  	 % Simulation time-step [s]
 simu.cicEndTime = 30;
+simu.mcrMatFile = 'mcrCases.mat';
 
 %% Wave Information 
 
 % % Irregular Waves using JS Spectrum with Equal Energy and Seeded Phase
-waves = waveClass('irregular');           % Initialize Wave Class and Specify Type
-waves.height = 1;                       % Significant Wave Height [m]
-waves.period = 4;                         % Peak Period [s]
-waves.spectrumType = 'JS';                % Specify Wave Spectrum Type
-waves.bem.option = 'EqualEnergy';         % Uses 'EqualEnergy' bins (default) 
-waves.phaseSeed = 1;                      % Phase is seeded so eta is the same
+% waves = waveClass('irregular');           % Initialize Wave Class and Specify Type
+% waves.height = 1.5;                       % Significant Wave Height [m]
+% waves.period = 7.7;                         % Peak Period [s]
+% waves.spectrumType = 'JS';                % Specify Wave Spectrum Type
+% waves.bem.option = 'EqualEnergy';         % Uses 'EqualEnergy' bins (default) 
+% waves.phaseSeed = 1;                      % Phase is seeded so eta is the same
+% waves.waterDepth = 30;
+% waves.direction = [320, 0 20];
+% waves.spread = [.1, .5, .4];
+% waves.current.option = 1;
+% waves.current.speed = .05;
+
+waveNum = 4;
+waveFiles = {'obsData/spectrumFile202.mat' 'obsData/spectrumFile313.mat' 'obsData/spectrumFile349.mat' 'obsData/spectrumFile419.mat'};
+waveDirs = [240.9309   48.4308  107.6652  108.3043];
+
+waves = waveClass('spectrumImport');      % Create the Wave Variable and Specify Type
+waves.spectrumFile = string(waveFiles(waveNum));  % Name of User-Defined Spectrum File 202 313 349 419
+waves.direction = waveDirs(waveNum); % 240.9309   48.4308  107.6652  108.3043
 waves.waterDepth = 30;
+waves.phaseSeed = 1;                      % Phase is seeded so eta is the same
+
+waves.current.option = 1;
+waves.current.speed = .05;
+waves.current.direction = 270;
+
+% %% Wave Visualization Markers
+% % Example with a square mesh of visualization markers
+% marker = 20;
+% distance = 5;
+% [X,Y] = meshgrid(-marker:distance:marker,-marker:distance:marker);
+% waves.marker.location = [reshape(X,[],1),reshape(Y,[],1)]; % Marker Locations [X,Y]
+% clear('marker','distance','X','Y')
+% waves.marker.style = 1; % 1: Sphere, 2: Cube, 3: Frame.
+% waves.marker.size = 10; % Marker Size in Pixels
+% waves.marker.graphicColor = [1,0,0];
 
 %% Body Data
 % Float
@@ -31,36 +61,53 @@ body(1)              = bodyClass('./hydrodata_SNL/wamitIRR1L1PCGCubitv2/wec_and_
 % Body 1 CB adjusted based upon buoy diagram because the box modeled in BEM as
 % solid geometry
 % hydrostatic stiffness = 1000 N*m/rad added for each body in YAW
-body(1).geometryFile = './geometry/float.stl';    
-body(1).mass         = 'equilibrium';                   
-body(1).inertia      = [7484 7484 1025*7.6135596];  % provided inertia in roll/pitch...unsure about yaw inertia
-body(1).quadDrag.area = ones([1,6]);
-cdSurge = 0.5;
-cdHeave = 0.5;
-cdPitch = 0.5;
-body(1).quadDrag.cd = [cdSurge, 0.5, cdHeave, 0.5, cdPitch, 0.5];
 
-aboveWaterMass = 100; % kg, above water mass, 1 m above CG (does NOT affect hydrostatics)
+% calculate the flooded box mass and inertia
+boxVol = 1.3557^2*0.7493;
+boxMass = boxVol*1025;
+cgToBox = 1.016 - .218 + .7493/2;
+boxInertia = boxMass*cgToBox;
+
+body(1).geometryFile = './geometry/float.stl';    
+body(1).mass         = 3747 + boxMass; %'equilibrium';              
+body(1).inertia      = [7484+boxInertia 7484+boxInertia 1025*7.6135596];  % provided inertia in roll/pitch...unsure about yaw inertia
+body(1).quadDrag.area = [2.5553 2.5553 8.5634 8.5634 8.5634 1.0768];
+cdSurge = 8;
+cdHeave = 2;
+cdPitch = 8;
+body(1).quadDrag.cd = [cdSurge, 0.5, cdHeave, 0.5, cdPitch, 0.5];
+body(1).meanDrift = 2;
+
+aboveWaterMass = 40; % kg, above water mass, 1 m above CG (does NOT affect hydrostatics)
 aboveWaterMassLoc = [0 0 1]; %30*tan(mooringAngle)
 
 % NSIF
 body(2)              = bodyClass('');        
 body(2).geometryFile = './geometry/NSIF.stl';  
 body(2).nonHydro = 2;                               % this is a DRAG body)
-body(2).mass         = 320;     % static mass + added from BEM
-body(2).volume       = (160)/1025; % Calculated from static wet mass + added in heave
+% body(2).mass         = 320;     % static mass + added from BEM
+% body(2).volume       = 160/1025; % Calculated from static wet mass + added in heave
+body(2).mass         = 320 + 1.2416*1000;     % static mass + added from BEM
+body(2).volume       = (160 + 1.2416*1000)/1025; % Calculated from static wet mass + added in heave
 %body(2).centerBuoyancy = body(2).centerGravity + [0 0 1];
 body(2).inertia      = [243.3997 + 216.043,  243.3997 + 216.043, 59.7314 + 0.266]; % inertia dry mass assuming uniform cylinder + added mass 
 body(2).centerGravity = [0,0,-8];                                % provided from deployment geometry
 body(2).centerBuoyancy = [0,0,-7];                               % assumed to make statically stable: note not filled geometry so we don't have good a priori
-body(2).quadDrag.area = [0 0 0 3.0192 3.0192 10]; % Uses projected areas of NSIF
+body(2).quadDrag.area = [3.0192 3.0192 2.3888 3.0192 3.0192 10]; % Uses projected areas of NSIF
 body(2).quadDrag.cd = 0.5 .* ones([1,6]);                       % values used in a Proteus DS simulation
-body(2).quadDrag.cd(1:3) = 0;                       % values used in a Proteus DS simulation
-body(2).morisonElement.option = 1;  
-body(2).morisonElement.cd = [0.5; 0.5; 0.5].';
-body(2).morisonElement.ca =[1.9405 1.9405 1.2416];%1.9405
-body(2).morisonElement.VME = body(2).volume;
-body(2).morisonElement.area = [3.0192 3.0192 2.3888];
+% body(2).quadDrag.cd(1:3) = 0;                       % values used in a Proteus DS simulation
+body(2).hydroStiffness = zeros(6);
+body(2).hydroStiffness(3:end,3:end) = [1.0990e-07, 2.4357e-04, -4.6197e-05, 0; 
+                                        2.4357e-04, -0.8268, -1.8562e-04, 0;
+                                        -4.6197e-05, -1.8562e-04, -0.8270, 0;
+                                        0, 0, 0, 0.9950];
+
+% body(2).morisonElement.option = 1;  
+% body(2).morisonElement.cd = [0.5; 0.5; 0.5].';
+% % body(2).morisonElement.ca = [1.9405 1.9405 1.2416];
+% body(2).morisonElement.ca = [0 0 1.2416-1.9405];% 
+% body(2).morisonElement.VME = body(2).volume;
+% body(2).morisonElement.area = [3.0192 3.0192 2.3888];
 % TODO: Add morison element CA/CD for surge and heave to bring in the added
 % mass contribution.
 
@@ -133,10 +180,5 @@ mooring(1)  = mooringClass('mooring');
 mooring(1).location = [0.0 0.0 -9.500]; % assumed attached to approx bottom of NSIF
 
 % mooring 
-L0 = 30 - 9.5; % equilibrium length: make sure this is mooring.location + waves.waterDepth
+L0 = 30-9.5; % equilibrium length: make sure this is mooring.location + waves.waterDepth
 polyNom = fliplr([0, 9.2e3, -15e3, 0, 15e3]); % polynomial definition
-
-
-
-
-

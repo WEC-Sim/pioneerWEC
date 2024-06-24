@@ -1,0 +1,220 @@
+close all
+clear all
+clc
+
+files = dir('*.mat');
+
+mcrOverall = {};
+
+load(files(1).name)
+mcrOverall = mcrNew;
+waveDirs = [240.9309   48.4308  107.6652  108.3043];
+waveNums = [1 2 3 4];
+
+ignoreFields = ["header","cases"];
+horizCatFields = ["waveDirection","aboveWaterMass", "cdSurge", "cdHeave", "cdPitch"];
+vertCatFields = ["posStd", "velStd", "accStd", "forceStd","posStdXY", "velStdXY", "accStdXY", "forceStdXY"];
+
+fns = fieldnames(mcrOverall);
+
+% FIX - loop through files names and sort them
+for ii = 1:length(files)
+    fileInd(ii) = sscanf(files(ii).name,'mcrResPCT%f.mat');
+end
+[~,fileInds] = sort(fileInd);
+
+for ii = 2:length(files)
+    load(files(fileInds(ii)).name)
+
+    for jj = 1:size(mcrOverall.cases,2)
+        mcrOverall.cases{jj} = [mcrOverall.cases{jj};mcrNew.cases{jj}];
+    end
+
+    for jj = 1:length(fns)
+        if any(strcmp(fns{jj},horizCatFields))
+            mcrOverall.(fns{jj}) = [mcrOverall.(fns{jj}),mcrNew.(fns{jj})];
+        elseif any(strcmp(fns{jj},vertCatFields))
+            mcrOverall.(fns{jj}) = [mcrOverall.(fns{jj});mcrNew.(fns{jj})];
+        end
+    end
+
+end
+
+mcrOverall = rmfield(mcrOverall,{'waveHeight','wavePeriod'}); % delete wave height and period fields
+% add wave numbers
+mcrOverall.waveNum = [];
+for ii = 1:length(mcrOverall.aboveWaterMass)/4
+    mcrOverall.waveNum = [mcrOverall.waveNum, waveNums];
+end
+
+fns = fieldnames(mcrOverall);
+for ii = 1:length(fns)
+    if any(strcmp(fns{ii},[horizCatFields,"waveNum"]))
+        mcrOverall.(fns{ii}) = mcrOverall.(fns{ii})';
+    end
+end
+
+% compare the standard deviations for each run to the standard deviations
+% from the observed data
+load('../obsData/processedData')
+for ii = 1:length(mcrOverall.aboveWaterMass)
+    mcrOverall.velStdDiff(ii,1:3) = processedData{mcrOverall.waveNum(ii)}.NEDVelSTD - mcrOverall.velStdXY(ii,1:3);
+    mcrOverall.velStdDiff(ii,4:6) = processedData{mcrOverall.waveNum(ii)}.NEDGyrVelSTD - mcrOverall.velStdXY(ii,4:6);
+    mcrOverall.velStdPercentDiff(ii,1:3) = 100*(processedData{mcrOverall.waveNum(ii)}.NEDVelSTD - mcrOverall.velStdXY(ii,1:3))./processedData{mcrOverall.waveNum(ii)}.NEDVelSTD;
+    mcrOverall.velStdPercentDiff(ii,4:6) = 100*(processedData{mcrOverall.waveNum(ii)}.NEDGyrVelSTD - mcrOverall.velStdXY(ii,4:6))./processedData{mcrOverall.waveNum(ii)}.NEDGyrVelSTD;
+    mcrOverall.velObjFun(ii) = mean(abs([mcrOverall.velStdPercentDiff(ii,1), mcrOverall.velStdPercentDiff(ii,3), mcrOverall.velStdPercentDiff(ii,3)]));
+end
+
+mcrOverall.velObjFun = mcrOverall.velObjFun';
+
+mcrWave = {};
+fns = fieldnames(mcrOverall);
+% sort by wave
+for ii = 1:4
+    perWaveCount = 1;
+    for jj = 1:length(mcrOverall.aboveWaterMass)
+        if mcrOverall.waveNum(jj) == ii
+            for kk = 1:length(fns)
+                if ~any(strcmp(fns{kk},ignoreFields))
+                    mcrWave{ii}.(fns{kk})(perWaveCount,:) = mcrOverall.(fns{kk})(jj,:);
+                end
+            end
+            perWaveCount = perWaveCount+1;
+        end
+    end
+end
+
+% for waves, calculate the mean absolute percent error
+for ii = 1:length(mcrWave{1}.aboveWaterMass)
+    errorVals(ii) = mean([mcrWave{1}.velObjFun(ii), mcrWave{2}.velObjFun(ii), mcrWave{3}.velObjFun(ii), mcrWave{4}.velObjFun(ii)]);
+end
+
+
+
+% for all combinations of variables and dofs, create plots of the
+% pitch response difference
+
+tuneVars = ["aboveWaterMass","cdSurge","cdHeave","cdPitch"];
+DOFs = ["Surge", "Heave", "Pitch"];
+DOFNums = [1 3 5];
+
+% for directions, calculate the mean absolute percent error
+for ii = 1:length(mcrWave{1}.aboveWaterMass)
+    for jj = 1:length(DOFs)
+        errorValDir(ii,jj) = mean([mcrWave{1}.velStdPercentDiff(ii,DOFNums(jj)), mcrWave{2}.velStdPercentDiff(ii,DOFNums(jj)), mcrWave{3}.velStdPercentDiff(ii,DOFNums(jj)), mcrWave{4}.velStdPercentDiff(ii,DOFNums(jj))]);
+    end
+end
+
+waveNum = 3;
+
+for ii = 1:length(mcrWave{1}.aboveWaterMass)
+    overallError(ii) = mean([mcrWave{1}.velObjFun(ii),mcrWave{2}.velObjFun(ii),mcrWave{3}.velObjFun(ii),mcrWave{4}.velObjFun(ii)]);
+end
+
+% for each dof and each wave, sort standard deviation
+for ii = 1:4
+    mcrOverall.velStdIMU(ii,1:3) = processedData{ii}.NEDVelSTD;
+    mcrOverall.velStdIMU(ii,4:6) = processedData{ii}.NEDGyrVelSTD;
+end
+
+%% Plot each dof with respect to the cd in that dof
+cdList = ["cdSurge","cdHeave","cdPitch"];
+figure('Position', [10 10 400 600])
+for ii = 1:length(DOFs)
+    subplot(3,1,ii)
+    scatter(eval(strcat('mcrWave{1}.',cdList(ii))),errorValDir(:,ii))
+    xlabel(cdList(ii))
+    ylabel(strcat('Error (%) - ',DOFs(ii)))
+end
+
+%% Plot each dof with respect to cd in that dof for one wave
+cdList = ["cdSurge","cdHeave","cdPitch"];
+figure('Position', [10 10 400 600])
+for ii = 1:length(DOFs)
+    subplot(3,1,ii)
+    scatter(eval(strcat('mcrWave{1}.',cdList(ii))),mcrWave{waveNum}.velStdPercentDiff(:,DOFNums(ii)))
+    xlabel(cdList(ii))
+    ylabel(strcat('Error (%) - ',DOFs(ii)))
+    %annotation('textbox',[.9 .5 .1 .2], 'String','Text outside the axes')
+    stdStr = strcat('STD Value: ', num2str(round(mcrOverall.velStdIMU(waveNum,ii),2)));
+    annotation('textbox',[.2 .85-ii*.28 .3 .3],'String',stdStr,'FitBoxToText','on');
+end
+
+%% Plot combinations for all waves and each degree of freedom
+for ii = 1:length(DOFs)
+    for jj = 1:length(tuneVars)
+        figure()
+        scatter(eval(strcat('mcrWave{1}.',tuneVars(jj))),errorValDir(:,ii))
+        xlabel(tuneVars(jj))
+        ylabel(strcat('Mean Absolute Velocity Error (%) - ',DOFs(ii)))
+    end
+end
+
+
+%% Plot best combinations for all waves
+for ii = 1:length(tuneVars)
+    figure()
+    scatter(eval(strcat('mcrWave{',num2str(waveNum),'}.',tuneVars(ii))),overallError)
+    xlabel(tuneVars(ii))
+    ylabel('Mean Absolute Velocity Error (%)')
+end
+
+%% Plot all combinations for mean absolute velocity error
+
+for ii = 1:length(tuneVars)
+    figure('Position', [10 10 900 600])
+    for jj = 1:length(tuneVars)
+
+        ax1 = subplot(2,2,jj);
+        scatter3(eval(strcat('mcrWave{',num2str(waveNum),'}.',tuneVars(ii))),eval(strcat('mcrWave{',num2str(waveNum),'}.',tuneVars(jj))), ...
+            overallError,10,overallError)
+        colormap(gca,"winter")
+        xlabel(tuneVars(ii))
+        ylabel(tuneVars(jj))
+        if ii == 1 || jj == 3
+            zlabel('Mean Absolute Velocity Error (%)')
+        end
+
+    end
+end
+
+%% Plot all combinations for a specific wave
+
+% start by creating surface of 2 variables for pitch response
+figure()
+scatter3(mcrWave{1}.aboveWaterMass,mcrWave{1}.cdSurge,mcrWave{1}.velStdDiff(:,5),8,abs(mcrWave{1}.velStdDiff(:,5)))
+xlabel('Above Water Mass (kg)')
+ylabel('Cd Surge')
+colormap(gca,"winter")
+
+for ii = 1:length(DOFs)
+    for jj = 1:length(tuneVars)
+        figure()
+        scatter(eval(strcat('mcrWave{1}.',tuneVars(jj))),mcrWave{waveNum}.velStdPercentDiff(:,DOFNums(ii)))
+        xlabel(tuneVars(jj))
+        ylabel(strcat('Velocity Error (%) - ',DOFs(ii)))
+        % add in text to specific the value comparison
+    end
+end
+
+% for ii = 1:length(DOFs)
+%     for jj = 1:length(tuneVars)
+%         figure('Position', [10 10 900 600])
+%         numPlots = 1;
+%         for kk = 1:length(tuneVars)
+% 
+%             ax1 = subplot(2,2,numPlots);
+%             scatter3(eval(strcat('mcrWave{',num2str(waveNum),'}.',tuneVars(jj))),eval(strcat('mcrWave{',num2str(waveNum),'}.',tuneVars(kk))), ...
+%                 mcrWave{waveNum}.velStdPercentDiff(:,DOFNums(ii)),10,mcrWave{waveNum}.velStdPercentDiff(:,DOFNums(ii)))
+%             colormap(gca,"winter")
+%             xlabel(tuneVars(jj))
+%             ylabel(tuneVars(kk))
+%             if kk == 1 || kk == 3
+%                 zlabel(strcat(DOFs(ii),' STD % Diff (Observed-WEC-Sim)'))
+%             end
+% 
+%             numPlots = numPlots+1;
+%         end
+%     end
+% end
+

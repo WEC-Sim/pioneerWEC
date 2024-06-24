@@ -1,0 +1,21 @@
+
+WEC-Sim Input From Standard wecSimInputFile.m Of Case Directory... 
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('run')" style="font-weight:bold">run</a>
+wecSimInputFile not found.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('initializeWecSim', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\functions\initializeWecSim.m', 62)" style="font-weight:bold">initializeWecSim</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\functions\initializeWecSim.m',62,0)">line 62</a>)
+    run('wecSimInputFile');
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('run', 'C:\Program Files\MATLAB\R2023b\toolbox\matlab\lang\run.m', 99)" style="font-weight:bold">run</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2023b\toolbox\matlab\lang\run.m',99,0)">line 99</a>)
+evalin('caller', strcat(script, ';'));
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('wecSim', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSim.m', 43)" style="font-weight:bold">wecSim</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSim.m',43,0)">line 43</a>)
+run('initializeWecSim');
+} 
+load('mcrResPCT1.mat')
+wecSim
+WEC-Sim: An open-source code for simulating wave energy converters
+Version: 6.0
+
+Initializing the Simulation Class...
+	Case Dir: C:\Users\jtgrasb\Documents\GitHub\pioneerSNL_Dom 

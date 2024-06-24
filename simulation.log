@@ -5,7 +5,8 @@ Version: 6.0
 
 Initializing the Simulation Class...
 	Case Dir: C:\Users\jtgrasb\Documents\GitHub\pioneerSNL_Dom 
-Elapsed time is 0.343221 seconds.
+wecSimMCR Case 1
+Elapsed time is 0.166826 seconds.
 
 WEC-Sim Pre-processing ...   
 [Warning: Because water depth is specified in the wecSimInputFile, the water depth from the BEM data is ignored] 
@@ -13,33 +14,29 @@ WEC-Sim Pre-processing ...
 In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('waveClass/setup', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\objects\waveClass.m', 253)" style="font-weight:bold">waveClass/setup</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\objects\waveClass.m',253,0)">line 253</a>)
 In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('initializeWecSim', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\functions\initializeWecSim.m', 256)" style="font-weight:bold">initializeWecSim</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\functions\initializeWecSim.m',256,0)">line 256</a>)
 In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('run', 'C:\Program Files\MATLAB\R2023b\toolbox\matlab\lang\run.m', 99)" style="font-weight:bold">run</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2023b\toolbox\matlab\lang\run.m',99,0)">line 99</a>)
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('wecSim', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSim.m', 43)" style="font-weight:bold">wecSim</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSim.m',43,0)">line 43</a>)] 
-[Warning: "body.morisonElement.z" is not used for "body.morisonElement.option = 1". Check body 2 element 1] 
-[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('initializeWecSim', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\functions\initializeWecSim.m', 365)" style="font-weight:bold">initializeWecSim</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\functions\initializeWecSim.m',365,0)">line 365</a>)
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('run', 'C:\Program Files\MATLAB\R2023b\toolbox\matlab\lang\run.m', 99)" style="font-weight:bold">run</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2023b\toolbox\matlab\lang\run.m',99,0)">line 99</a>)
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('wecSim', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSim.m', 43)" style="font-weight:bold">wecSim</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSim.m',43,0)">line 43</a>)] 
-Elapsed time is 1.512662 seconds.
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('wecSim', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSim.m', 43)" style="font-weight:bold">wecSim</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSim.m',43,0)">line 43</a>)
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('wecSimMCR', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSimMCR.m', 92)" style="font-weight:bold">wecSimMCR</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSimMCR.m',92,0)">line 92</a>)] 
+	"spectrumImport" uses the number of imported wave frequencies (not "Traditional" or "EqualEnergy")
+Elapsed time is 0.429866 seconds.
 
 WEC-Sim Simulation Settings:
 	Start Time                     (sec) = 0
-	End Time                       (sec) = 150
+	End Time                       (sec) = 1300
 	Time Step Size                 (sec) = 0.05
-	Ramp Function Time             (sec) = 1.5
+	Ramp Function Time             (sec) = 65
 	Convolution Integral Interval  (sec) = 30
-	 Number of Time Steps     = 3000 
+	 Number of Time Steps     = 26000 
 
 Wave Environment: 
-	Wave Type                            = Irregular Waves (Predefined Random Phase)
-	Spectrum Type                        = JONSWAP 
-	Significant Wave Height, Hs      (m) = 1
-	Peak Wave Period, Tp           (sec) = 4
+	Wave Type                            = Irregular waves with imported wave spectrum (Seeded Phase)
+	Spectrum Type                        = Imported Spectrum 
 
 List of Body: Number of Bodies = 1 
 
 	***** Body Number 1, Name: pioneer_sym *****
 	Body CG                          (m) = [0,0,0.298]
-	Body Mass                       (kg) = 5109.46 
-	Body Moments of Inertia       (kgm2) = [7484,7484,7803.9]
+	Body Mass                       (kg) = 5158.58 
+	Body Moments of Inertia       (kgm2) = [9139.29,9139.29,7803.9]
 	Body Products of Inertia      (kgm2) = [0,0,0]
 
 List of PTO(s): Number of PTOs = 3 
@@ -62,199 +59,4 @@ List of Constraint(s): Number of Constraints = 1
 
 
 Simulating the WEC device defined in the SimMechanics model C:\Users\jtgrasb\Documents\GitHub\pioneerSNL_Dom\pioneerSNL.slx...   
-Elapsed time is 2.434855 seconds.
-{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('wecSim')" style="font-weight:bold">wecSim</a>
-Simulation aborted
-} 
-runComparisonPCT
-Elapsed time is 0.123911 seconds.
-mcrOverall
-
-mcrOverall = 
-
-  <a href="matlab:helpPopup struct" style="font-weight:bold">struct</a> with fields:
-
-    header: ["waves.height"    "waves.period"    "aboveWaterMass"    "cdSurge"    "cdHeave"    "cdPitch"]
-     cases: [4×6 double]
-
-runComparisonPCT
-Starting parallel pool (parpool) using the 'Processes' profile ...
-Connected to parallel pool with 4 workers.
-Opening the parallel pool took 119.763 seconds.
-WEC-Sim: An open-source code for simulating wave energy converters
-Version: 6.0
-
-Initializing the Simulation Class...
-	Case Dir: C:\Users\jtgrasb\Documents\GitHub\pioneerSNL_Dom\fullMCRSetup 
-WEC-Sim: An open-source code for simulating wave energy converters
-Warning: File not found or permission denied
-> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('initializeWecSim', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\functions\initializeWecSim.m', 27)" style="font-weight:bold">initializeWecSim</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\functions\initializeWecSim.m',27,0)">line 27</a>)
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('run', 'C:\Program Files\MATLAB\R2023b\toolbox\matlab\lang\run.m', 99)" style="font-weight:bold">run</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2023b\toolbox\matlab\lang\run.m',99,0)">line 99</a>)
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('wecSim', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSim.m', 43)" style="font-weight:bold">wecSim</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSim.m',43,0)">line 43</a>)
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('wecSimFcn', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSimFcn.m', 23)" style="font-weight:bold">wecSimFcn</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSimFcn.m',23,0)">line 23</a>)
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('parallel_function>make_general_channel/channel_general', 'C:\Program Files\MATLAB\R2023b\toolbox\matlab\lang\parallel_function.m', 852)" style="font-weight:bold">parallel_function>make_general_channel/channel_general</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2023b\toolbox\matlab\lang\parallel_function.m',852,0)">line 852</a>)
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('parallel.internal.parfor.cppRemoteParallelFunction', 'C:\Program Files\MATLAB\R2023b\toolbox\parallel\cluster\+parallel\+internal\+parfor\cppRemoteParallelFunction.m', 53)" style="font-weight:bold">parallel.internal.parfor.cppRemoteParallelFunction</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2023b\toolbox\parallel\cluster\+parallel\+internal\+parfor\cppRemoteParallelFunction.m',53,0)">line 53</a>)
-
-WEC-Sim Input From Standard wecSimInputFile.m Of Case Directory... 
-Version: 6.0
-
-Initializing the Simulation Class...
-	Case Dir: C:\Users\jtgrasb\Documents\GitHub\pioneerSNL_Dom\fullMCRSetup 
-
-WEC-Sim Input From Standard wecSimInputFile.m Of Case Directory... 
-WEC-Sim: An open-source code for simulating wave energy converters
-Version: 6.0
-
-Initializing the Simulation Class...
-	Case Dir: C:\Users\jtgrasb\Documents\GitHub\pioneerSNL_Dom\fullMCRSetup 
-WEC-Sim: An open-source code for simulating wave energy converters
-Version: 6.0
-
-Initializing the Simulation Class...
-	Case Dir: C:\Users\jtgrasb\Documents\GitHub\pioneerSNL_Dom\fullMCRSetup 
-wecSimMCR Case 1
-Elapsed time is 1.223465 seconds.
-wecSimMCR Case 2
-Elapsed time is 1.221903 seconds.
-
-WEC-Sim Pre-processing ...   
-
-WEC-Sim Pre-processing ...   
-Warning: Because water depth is specified in the wecSimInputFile, the water depth from the BEM data is ignored
-> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('waveClass/setWaterDepth', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\objects\waveClass.m', 571)" style="font-weight:bold">waveClass/setWaterDepth</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\objects\waveClass.m',571,0)">line 571</a>)
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('waveClass/setup', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\objects\waveClass.m', 253)" style="font-weight:bold">waveClass/setup</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\objects\waveClass.m',253,0)">line 253</a>)
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('initializeWecSim', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\functions\initializeWecSim.m', 256)" style="font-weight:bold">initializeWecSim</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\functions\initializeWecSim.m',256,0)">line 256</a>)
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('run', 'C:\Program Files\MATLAB\R2023b\toolbox\matlab\lang\run.m', 99)" style="font-weight:bold">run</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2023b\toolbox\matlab\lang\run.m',99,0)">line 99</a>)
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('wecSim', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSim.m', 43)" style="font-weight:bold">wecSim</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSim.m',43,0)">line 43</a>)
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('wecSimFcn', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSimFcn.m', 23)" style="font-weight:bold">wecSimFcn</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSimFcn.m',23,0)">line 23</a>)
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('parallel_function>make_general_channel/channel_general', 'C:\Program Files\MATLAB\R2023b\toolbox\matlab\lang\parallel_function.m', 852)" style="font-weight:bold">parallel_function>make_general_channel/channel_general</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2023b\toolbox\matlab\lang\parallel_function.m',852,0)">line 852</a>)
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('parallel.internal.parfor.cppRemoteParallelFunction', 'C:\Program Files\MATLAB\R2023b\toolbox\parallel\cluster\+parallel\+internal\+parfor\cppRemoteParallelFunction.m', 53)" style="font-weight:bold">parallel.internal.parfor.cppRemoteParallelFunction</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2023b\toolbox\parallel\cluster\+parallel\+internal\+parfor\cppRemoteParallelFunction.m',53,0)">line 53</a>)
-Elapsed time is 1.613929 seconds.
-
-WEC-Sim Simulation Settings:
-	Start Time                     (sec) = 0
-	End Time                       (sec) = 150
-	Time Step Size                 (sec) = 0.05
-	Ramp Function Time             (sec) = 7.5
-	Convolution Integral Interval  (sec) = 30
-	 Number of Time Steps     = 3000 
-
-Wave Environment: 
-	Wave Type                            = Irregular Waves (Predefined Random Phase)
-	Spectrum Type                        = JONSWAP 
-	Significant Wave Height, Hs      (m) = 1.31
-	Peak Wave Period, Tp           (sec) = 11.1
-
-List of Body: Number of Bodies = 1 
-
-	***** Body Number 1, Name: pioneer_sym *****
-	Body CG                          (m) = [0,0,0.298]
-	Body Mass                       (kg) = 5109.46 
-	Body Moments of Inertia       (kgm2) = [7484,7484,7803.9]
-	Body Products of Inertia      (kgm2) = [0,0,0]
-
-List of PTO(s): Number of PTOs = 3 
-
-	***** PTO Name: pto1 *****
-	PTO Stiffness           (N/m;Nm/rad) = 1
-	PTO Damping           (Ns/m;Nsm/rad) = 10
-
-	***** PTO Name: pto2 *****
-	PTO Stiffness           (N/m;Nm/rad) = 1
-	PTO Damping           (Ns/m;Nsm/rad) = 10
-
-	***** PTO Name: pto3 *****
-	PTO Stiffness           (N/m;Nm/rad) = 1
-	PTO Damping           (Ns/m;Nsm/rad) = 10
-
-List of Constraint(s): Number of Constraints = 1 
-
-	***** Constraint Name: Constraint1 *****
-
-
-Simulating the WEC device defined in the SimMechanics model C:\Users\jtgrasb\Documents\GitHub\pioneerSNL_Dom\fullMCRSetup\pioneerSNL.slx...   
-Warning: The file containing block diagram '<a href="matlab:open_system ('pioneerSNL')">pioneerSNL</a>' is shadowed by a file of the same name higher on the MATLAB path. This can cause unexpected behavior. For more information see <a href="matlab:helpview([docroot '/toolbox/simulink/helptargets.map'], 'shadowing')">"Avoiding Problems with Shadowed Files"</a> in the Simulink documentation.
-
-The file containing the block diagram is: C:\Users\jtgrasb\Documents\GitHub\pioneerSNL_Dom\fullMCRSetup\pioneerSNL.slx.
-Warning: Because water depth is specified in the wecSimInputFile, the water depth from the BEM data is ignored
-> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('waveClass/setWaterDepth', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\objects\waveClass.m', 571)" style="font-weight:bold">waveClass/setWaterDepth</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\objects\waveClass.m',571,0)">line 571</a>)
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('waveClass/setup', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\objects\waveClass.m', 253)" style="font-weight:bold">waveClass/setup</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\objects\waveClass.m',253,0)">line 253</a>)
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('initializeWecSim', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\functions\initializeWecSim.m', 256)" style="font-weight:bold">initializeWecSim</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\functions\initializeWecSim.m',256,0)">line 256</a>)
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('run', 'C:\Program Files\MATLAB\R2023b\toolbox\matlab\lang\run.m', 99)" style="font-weight:bold">run</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2023b\toolbox\matlab\lang\run.m',99,0)">line 99</a>)
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('wecSim', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSim.m', 43)" style="font-weight:bold">wecSim</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSim.m',43,0)">line 43</a>)
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('wecSimFcn', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSimFcn.m', 23)" style="font-weight:bold">wecSimFcn</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSimFcn.m',23,0)">line 23</a>)
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('parallel_function>make_general_channel/channel_general', 'C:\Program Files\MATLAB\R2023b\toolbox\matlab\lang\parallel_function.m', 852)" style="font-weight:bold">parallel_function>make_general_channel/channel_general</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2023b\toolbox\matlab\lang\parallel_function.m',852,0)">line 852</a>)
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('parallel.internal.parfor.cppRemoteParallelFunction', 'C:\Program Files\MATLAB\R2023b\toolbox\parallel\cluster\+parallel\+internal\+parfor\cppRemoteParallelFunction.m', 53)" style="font-weight:bold">parallel.internal.parfor.cppRemoteParallelFunction</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2023b\toolbox\parallel\cluster\+parallel\+internal\+parfor\cppRemoteParallelFunction.m',53,0)">line 53</a>)
-Elapsed time is 1.633833 seconds.
-The file higher on the MATLAB path is: C:\Users\jtgrasb\Documents\GitHub\pioneerSNL_Dom\pioneerSNL.slx
-> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('load_system>i_load_system', 'C:\Program Files\MATLAB\R2023b\toolbox\simulink\slx\m\load_system.m', 44)" style="font-weight:bold">load_system>i_load_system</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2023b\toolbox\simulink\slx\m\load_system.m',44,0)">line 44</a>)
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('load_system', 'C:\Program Files\MATLAB\R2023b\toolbox\simulink\slx\m\load_system.m', 20)" style="font-weight:bold">load_system</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2023b\toolbox\simulink\slx\m\load_system.m',20,0)">line 20</a>)
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('simulationClass/loadSimMechModel', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\objects\simulationClass.m', 216)" style="font-weight:bold">simulationClass/loadSimMechModel</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\objects\simulationClass.m',216,0)">line 216</a>)
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('initializeWecSim', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\functions\initializeWecSim.m', 533)" style="font-weight:bold">initializeWecSim</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\functions\initializeWecSim.m',533,0)">line 533</a>)
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('run', 'C:\Program Files\MATLAB\R2023b\toolbox\matlab\lang\run.m', 99)" style="font-weight:bold">run</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2023b\toolbox\matlab\lang\run.m',99,0)">line 99</a>)
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('wecSim', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSim.m', 43)" style="font-weight:bold">wecSim</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSim.m',43,0)">line 43</a>)
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('wecSimFcn', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSimFcn.m', 23)" style="font-weight:bold">wecSimFcn</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSimFcn.m',23,0)">line 23</a>)
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('parallel_function>make_general_channel/channel_general', 'C:\Program Files\MATLAB\R2023b\toolbox\matlab\lang\parallel_function.m', 852)" style="font-weight:bold">parallel_function>make_general_channel/channel_general</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2023b\toolbox\matlab\lang\parallel_function.m',852,0)">line 852</a>)
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('parallel.internal.parfor.cppRemoteParallelFunction', 'C:\Program Files\MATLAB\R2023b\toolbox\parallel\cluster\+parallel\+internal\+parfor\cppRemoteParallelFunction.m', 53)" style="font-weight:bold">parallel.internal.parfor.cppRemoteParallelFunction</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2023b\toolbox\parallel\cluster\+parallel\+internal\+parfor\cppRemoteParallelFunction.m',53,0)">line 53</a>)
-Elapsed time is 20.707522 seconds.
-
-WEC-Sim Simulation Settings:
-	Start Time                     (sec) = 0
-	End Time                       (sec) = 150
-	Time Step Size                 (sec) = 0.05
-	Ramp Function Time             (sec) = 7.5
-	Convolution Integral Interval  (sec) = 30
-	 Number of Time Steps     = 3000 
-
-Wave Environment: 
-	Wave Type                            = Irregular Waves (Predefined Random Phase)
-	Spectrum Type                        = JONSWAP 
-	Significant Wave Height, Hs      (m) = 0.95
-	Peak Wave Period, Tp           (sec) = 11.8
-
-List of Body: Number of Bodies = 1 
-
-	***** Body Number 1, Name: pioneer_sym *****
-	Body CG                          (m) = [0,0,0.298]
-	Body Mass                       (kg) = 5109.46 
-	Body Moments of Inertia       (kgm2) = [7484,7484,7803.9]
-	Body Products of Inertia      (kgm2) = [0,0,0]
-
-List of PTO(s): Number of PTOs = 3 
-
-	***** PTO Name: pto1 *****
-	PTO Stiffness           (N/m;Nm/rad) = 1
-	PTO Damping           (Ns/m;Nsm/rad) = 10
-
-	***** PTO Name: pto2 *****
-	PTO Stiffness           (N/m;Nm/rad) = 1
-	PTO Damping           (Ns/m;Nsm/rad) = 10
-
-	***** PTO Name: pto3 *****
-	PTO Stiffness           (N/m;Nm/rad) = 1
-	PTO Damping           (Ns/m;Nsm/rad) = 10
-
-List of Constraint(s): Number of Constraints = 1 
-
-	***** Constraint Name: Constraint1 *****
-
-
-Simulating the WEC device defined in the SimMechanics model C:\Users\jtgrasb\Documents\GitHub\pioneerSNL_Dom\fullMCRSetup\pioneerSNL.slx...   
-Warning: The file containing block diagram '<a href="matlab:open_system ('pioneerSNL')">pioneerSNL</a>' is shadowed by a file of the same name higher on the MATLAB path. This can cause unexpected behavior. For more information see <a href="matlab:helpview([docroot '/toolbox/simulink/helptargets.map'], 'shadowing')">"Avoiding Problems with Shadowed Files"</a> in the Simulink documentation.
-
-The file containing the block diagram is: C:\Users\jtgrasb\Documents\GitHub\pioneerSNL_Dom\fullMCRSetup\pioneerSNL.slx.
-{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('parallel.internal.parfor.ParforEngine/getCompleteIntervals')" style="font-weight:bold">parallel.internal.parfor.ParforEngine/getCompleteIntervals</a>
-
-
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('parallel_function>distributed_execution', 'C:\Program Files\MATLAB\R2023b\toolbox\matlab\lang\parallel_function.m', 746)" style="font-weight:bold">parallel_function>distributed_execution</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2023b\toolbox\matlab\lang\parallel_function.m',746,0)">line 746</a>)
-        [tags, out] = P.getCompleteIntervals(chunkSize);
-
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('parallel_function', 'C:\Program Files\MATLAB\R2023b\toolbox\matlab\lang\parallel_function.m', 578)" style="font-weight:bold">parallel_function</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2023b\toolbox\matlab\lang\parallel_function.m',578,0)">line 578</a>)
-    R = distributed_execution(...
-
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('wecSimPCT', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSimPCT.m', 102)" style="font-weight:bold">wecSimPCT</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSimPCT.m',102,0)">line 102</a>)
-parfor imcr=1:length(mcr.cases(:,1))
-
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('runComparisonPCT', 'C:\Users\jtgrasb\Documents\GitHub\pioneerSNL_Dom\fullMCRSetup\runComparisonPCT.m', 64)" style="font-weight:bold">runComparisonPCT</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\pioneerSNL_Dom\fullMCRSetup\runComparisonPCT.m',64,0)">line 64</a>)
-    wecSimPCT
-} 
+Elapsed time is 0.243935 seconds.

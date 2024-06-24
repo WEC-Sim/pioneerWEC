@@ -2,9 +2,9 @@ clear all
 close all
 clc
 
-load('mcrResPCTSurgeAMNEW.mat');
+load('mcrResPCTSurgeAM.mat');
 mcrSurgeAM = mcrOverall;
-load('mcrResPCTHeaveAMNEW.mat');
+load('mcrResPCTHeaveAM.mat');
 mcrHeaveAM = mcrOverall;
 
 load('./realData_Jantzen/processedDataStd.mat');
@@ -132,6 +132,13 @@ h.NodeChildren(3).YDir='normal';                   % turn Y-Axis normal directio
 xlabel('Wave Peak Period (s)')
 ylabel('Significant Wave Height (m)')
 title('WEC-Sim Pitch STD (deg) - Heave AM')
+
+figure()
+h = heatmap(periodsVec,heightsVec,100*(pitchStdMatWS_Surge' - pitchStdMatWS_Heave')./pitchStdMatWS_Surge','MissingDataColor',[1 1 1]);
+h.NodeChildren(3).YDir='normal';                   % turn Y-Axis normal direction
+xlabel('Wave Peak Period (s)')
+ylabel('Significant Wave Height (m)')
+title('WEC-Sim Pitch STD difference () - Surge vs. Heave AM')
 
 minColor = min([100*(pitchStdMatWS_Surge'-pitchStdMatObs')./pitchStdMatObs';100*(pitchStdMatWS_Heave'-pitchStdMatObs')./pitchStdMatObs'],[],'all');
 maxColor = max([100*(pitchStdMatWS_Surge'-pitchStdMatObs')./pitchStdMatObs';100*(pitchStdMatWS_Heave'-pitchStdMatObs')./pitchStdMatObs'],[],'all');
