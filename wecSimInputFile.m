@@ -12,7 +12,7 @@ simu.rampTime  = 0.05*simu.endTime;           % Wave Ramp Time [s]
 simu.solver    = 'ode23t';                    % simu.solver = 'ode4' for fixed step & simu.solver = 'ode45' for variable step 
 simu.dt        = 0.05; 					  	 % Simulation time-step [s]
 simu.cicEndTime = 30;
-simu.mcrMatFile = 'mcrCases.mat';
+% simu.mcrMatFile = 'mcrCases.mat';
 
 %% Wave Information 
 
@@ -29,7 +29,7 @@ simu.mcrMatFile = 'mcrCases.mat';
 % waves.current.option = 1;
 % waves.current.speed = .05;
 
-waveNum = 4;
+waveNum = 1;
 waveFiles = {'obsData/spectrumFile202.mat' 'obsData/spectrumFile313.mat' 'obsData/spectrumFile349.mat' 'obsData/spectrumFile419.mat'};
 waveDirs = [240.9309   48.4308  107.6652  108.3043];
 
@@ -38,6 +38,13 @@ waves.spectrumFile = string(waveFiles(waveNum));  % Name of User-Defined Spectru
 waves.direction = waveDirs(waveNum); % 240.9309   48.4308  107.6652  108.3043
 waves.waterDepth = 30;
 waves.phaseSeed = 1;                      % Phase is seeded so eta is the same
+
+% Regular waves - run MCR for RAO
+% waves = waveClass('regularCIC');           % Initialize Wave Class and Specify Type
+% waves.height = 1;                       % Significant Wave Height [m]
+% waves.period = 2:.25:10;                         % Peak Period [s]
+% waves.waterDepth = 30;
+% waves.direction = 0;
 
 waves.current.option = 1;
 waves.current.speed = .05;
@@ -62,23 +69,23 @@ body(1)              = bodyClass('./hydrodata_SNL/wamitIRR1L1PCGCubitv2/wec_and_
 % solid geometry
 % hydrostatic stiffness = 1000 N*m/rad added for each body in YAW
 
-% calculate the flooded box mass and inertia
+% calculate the flooded box mass and inertia - NOT USED in final model
 boxVol = 1.3557^2*0.7493;
 boxMass = boxVol*1025;
 cgToBox = 1.016 - .218 + .7493/2;
 boxInertia = boxMass*cgToBox;
 
 body(1).geometryFile = './geometry/float.stl';    
-body(1).mass         = 3747 + boxMass; %'equilibrium';              
-body(1).inertia      = [7484+boxInertia 7484+boxInertia 1025*7.6135596];  % provided inertia in roll/pitch...unsure about yaw inertia
+body(1).mass         = 3747; %'equilibrium';   +boxMass            
+body(1).inertia      = [7484 7484 1025*7.6135596];  % provided inertia in roll/pitch...unsure about yaw inertia +boxInertia
 body(1).quadDrag.area = [2.5553 2.5553 8.5634 8.5634 8.5634 1.0768];
 cdSurge = 8;
 cdHeave = 2;
-cdPitch = 8;
-body(1).quadDrag.cd = [cdSurge, 0.5, cdHeave, 0.5, cdPitch, 0.5];
+cdPitch = 6;
+body(1).quadDrag.cd = [cdSurge, cdSurge, cdHeave, cdPitch, cdPitch, 0.5];
 body(1).meanDrift = 2;
 
-aboveWaterMass = 40; % kg, above water mass, 1 m above CG (does NOT affect hydrostatics)
+aboveWaterMass = -20; % kg, above water mass, 1 m above CG (does NOT affect hydrostatics)
 aboveWaterMassLoc = [0 0 1]; %30*tan(mooringAngle)
 
 % NSIF

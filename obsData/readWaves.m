@@ -49,7 +49,7 @@ for ii = 1:length(snips)
     spectrumData(:,1) = dataWaves.freq_Hz(:,waveIndex(ii));
     spectrumData(:,2) = psd;
     
-    save(['spectrumFile' num2str(snips(ii)) '.mat'],'spectrumData')
+    % save(['spectrumFile' num2str(snips(ii)) '.mat'],'spectrumData')
 
     % extract and process IMU data
     processedData{ii}.NEDTime = NED_IMU.Time(NED_IMU.Info.StartIndex(snips(ii)):NED_IMU.Info.EndIndex(snips(ii))) - NED_IMU.Time(NED_IMU.Info.StartIndex(snips(ii)));
@@ -57,18 +57,24 @@ for ii = 1:length(snips)
     [~,startIndPos] = min(abs(200-processedData{ii}.NEDTime));
 
     % convert to x-y axes consistent with wave direction:
-    waveAngleN = 90-avgDir(ii);
+    waveAngleN = avgDir(ii);
 
     processedData{ii}.NEDTimeVel = processedData{ii}.NEDTime(startIndVel:end);
     processedData{ii}.NEDTimePos = processedData{ii}.NEDTime(startIndPos:end);
+    
+    % because north is x and east is y, they need to be flipped to be
+    % consistent with WEC-Sim
+    NED_IMU.Acc = NED_IMU.Acc(:,[2 1 3]);
+    NED_IMU.Alpha = NED_IMU.Alpha(:,[2 1 3]);
+    NED_IMU.Gyr = NED_IMU.Gyr(:,[2 1 3]);
 
     processedData{ii}.NEDAcc = NED_IMU.Acc(NED_IMU.Info.StartIndex(snips(ii)):NED_IMU.Info.EndIndex(snips(ii)),:)*rotz(waveAngleN);
     processedData{ii}.NEDGyrAcc = NED_IMU.Alpha(NED_IMU.Info.StartIndex(snips(ii)):NED_IMU.Info.EndIndex(snips(ii)),:)*rotz(waveAngleN);
     processedData{ii}.NEDGyrVel = NED_IMU.Gyr(NED_IMU.Info.StartIndex(snips(ii)):NED_IMU.Info.EndIndex(snips(ii)),:)*rotz(waveAngleN);
     processedData{ii}.NEDGyrVel = processedData{ii}.NEDGyrVel(startIndVel:end,:);
 
-    processedData{ii}.NEDAccSTD = std(NED_IMU.Acc(NED_IMU.Info.StartIndex(snips(ii)):NED_IMU.Info.EndIndex(snips(ii)),:));
-    processedData{ii}.NEDGyrAccSTD = std(NED_IMU.Alpha(NED_IMU.Info.StartIndex(snips(ii)):NED_IMU.Info.EndIndex(snips(ii)),:));
+    processedData{ii}.NEDAccSTD = std(NED_IMU.Acc(NED_IMU.Info.StartIndex(snips(ii)):NED_IMU.Info.EndIndex(snips(ii)),:))*rotz(waveAngleN);
+    processedData{ii}.NEDGyrAccSTD = std(NED_IMU.Alpha(NED_IMU.Info.StartIndex(snips(ii)):NED_IMU.Info.EndIndex(snips(ii)),:))*rotz(waveAngleN);
     processedData{ii}.NEDGyrVelSTD = std(processedData{ii}.NEDGyrVel);
 
     dt = processedData{ii}.NEDTime(2) - processedData{ii}.NEDTime(1);
@@ -95,6 +101,8 @@ for ii = 1:length(snips)
     processedData{ii}.NEDPosSTD = std(posNew(startIndPos:end,:));
     processedData{ii}.NEDGyrPos = gyrPosNew(startIndPos:end,:);
     processedData{ii}.NEDGyrPosSTD = std(gyrPosNew(startIndPos:end,:));
+
+    disp([processedData{ii}.NEDVelSTD([1 3]),processedData{ii}.NEDGyrVelSTD(2)])
 
     figure()
     plot(processedData{ii}.NEDTime,vel)

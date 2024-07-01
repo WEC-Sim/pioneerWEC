@@ -104,9 +104,10 @@ for ii = 1:length(mcrWave{1}.aboveWaterMass)
     for jj = 1:length(DOFs)
         errorValDir(ii,jj) = mean([mcrWave{1}.velStdPercentDiff(ii,DOFNums(jj)), mcrWave{2}.velStdPercentDiff(ii,DOFNums(jj)), mcrWave{3}.velStdPercentDiff(ii,DOFNums(jj)), mcrWave{4}.velStdPercentDiff(ii,DOFNums(jj))]);
         errorValDirAbs(ii,jj) = mean([abs(mcrWave{1}.velStdPercentDiff(ii,DOFNums(jj))), abs(mcrWave{2}.velStdPercentDiff(ii,DOFNums(jj))), abs(mcrWave{3}.velStdPercentDiff(ii,DOFNums(jj))), abs(mcrWave{4}.velStdPercentDiff(ii,DOFNums(jj)))]);
-        errorValSum(ii,jj) = weights(1)*abs(mcrWave{1}.velStdPercentDiff(ii,DOFNums(jj))) + weights(2)*abs(mcrWave{2}.velStdPercentDiff(ii,DOFNums(jj))) + weights(3)*abs(mcrWave{3}.velStdPercentDiff(ii,DOFNums(jj))) + weights(4)*abs(mcrWave{4}.velStdPercentDiff(ii,DOFNums(jj)));
+        errorValSum(ii,jj) = weights(1)*abs(mcrWave{1}.velStdPercentDiff(ii,DOFNums(jj))) + weights(2)*abs(mcrWave{2}.velStdPercentDiff(ii,DOFNums(jj))) + weights(3)*abs(mcrWave{3}.velStdPercentDiff(ii,DOFNums(jj))) + weights(4)*abs(mcrWave{4}.velStdPercentDiff(ii,DOFNums(jj)));    
         for kk = 1:4
-            errorValWave(ii,jj,kk) = mcrWave{kk}.velStdDiff(ii,DOFNums(jj));
+            errorValWave(ii,jj,kk) = mcrWave{kk}.velStdDiff(ii,DOFNums(jj));    
+            errorValWavePct(ii,jj,kk) = mcrWave{kk}.velStdPercentDiff(ii,DOFNums(jj));    
         end
     end
 end
@@ -169,7 +170,7 @@ end
 
 cdList = ["cdSurge","cdHeave","cdPitch"];
 unitsStr = ["m","m","rad"];
-figure('Position', [10 10 600 600])
+figure('Position', [10 10 800 600])
 for ii = 1:length(DOFs)
     subplot(2,2,ii)
     scatter(eval(strcat('mcrWave{1}.',cdList(ii))),errorValSum(:,ii),'ok')
@@ -179,17 +180,21 @@ for ii = 1:length(DOFs)
     xlim([1.5,8.5])
 end
 
+surgeInd = find(mcrWave{1}.cdSurge == 8);
+heaveInd = find(mcrWave{1}.cdHeave == 2);
+pitchInd = find(mcrWave{1}.cdPitch == 6);
+optInds = intersect(intersect(surgeInd, heaveInd),pitchInd);
+
 subplot(2,2,4)
-scatter(mcrWave{1}.aboveWaterMass,errorValSum(:,3),'ok')
+scatter(mcrWave{1}.aboveWaterMass(optInds),errorValSum(optInds,3),'ok','filled')
 xlabel('aboveWaterMass (kg)')
 ylabel(strcat('Weighted Error (%)'))
 title('Pitch')
 xlim([-22,42])
 
-
-set(gcf, 'PaperPosition', [0 0 6 10])
-set(gcf, 'PaperSize', [6 10])
-print(gcf, strcat('../paperFigs/weightedError.pdf'), '-dpdf', '-fillpage','-r1000','-image')
+set(gcf, 'PaperPosition', [0 0 8 6])
+set(gcf, 'PaperSize', [8 6])
+print(gcf, strcat('../paperFigs/weightedErrorheaveAM.pdf'), '-dpdf', '-fillpage','-r1000','-image')
 
 
 %% Plot combinations for all waves and each degree of freedom
