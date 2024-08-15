@@ -16,28 +16,52 @@ heaveVec = str2num(fgets(fileID));
 pitchVec = str2num(fgets(fileID));
 fclose(fileID);
 
-waveFiles = string({'obsData/spectrumFile202.mat' 'obsData/spectrumFile313.mat' 'obsData/spectrumFile349.mat' 'obsData/spectrumFile419.mat'});
-waveDirs = [240.9309 48.4308 107.6652 108.3043];
+waveFiles = string({'obsData/spectrumFile197.mat' 'obsData/spectrumFile422.mat' 'obsData/spectrumFile141.mat' 'obsData/spectrumFile332.mat'});
+excFiles = ["obsData/excitationForceWave1.mat", "obsData/excitationForceWave2.mat", "obsData/excitationForceWave3.mat", "obsData/excitationForceWave4.mat"];
+waveDirs = [252.0421   56.5412  285.4639   97.5443];
 
 for ii = 1:length(waveNum)
 	fileVec(ii) = string(waveFiles(waveNum(ii)));
+	excFileVec(ii) = excFiles(waveNum(ii));
 	dirVec(ii) = waveDirs(waveNum(ii));
 end
+
+
 
 breakFlag = 0;
 if (length(waveNum) + numPar) == numPar*parCount
 	breakFlag = 1;
 elseif length(waveNum) < numPar*parCount
-	mcr = struct();
-	mcr.header = ["waves.spectrumFile", "waves.direction", "aboveWaterMass", "body(1).quadDrag.cd(1)", "body(1).quadDrag.cd(3)", "body(1).quadDrag.cd(5)"];
-	mcr.cases = {fileVec((1+numPar*(parCount-1)):end)', dirVec((1+numPar*(parCount-1)):end)', massVec((1+numPar*(parCount-1)):end)', surgeVec((1+numPar*(parCount-1)):end)', heaveVec((1+numPar*(parCount-1)):end)', pitchVec((1+numPar*(parCount-1)):end)'};
-
+	excFiles = excFileVec((1+numPar*(parCount-1)):end)';
+	waveDirs = dirVec((1+numPar*(parCount-1)):end)';
+	aboveWaterMasses = massVec((1+numPar*(parCount-1)):end)';
+	cdSurges = surgeVec((1+numPar*(parCount-1)):end)';
+	cdHeaves = heaveVec((1+numPar*(parCount-1)):end)';
+	cdPitches = pitchVec((1+numPar*(parCount-1)):end)';
 else
-	mcr = struct();
-	mcr.header = ["waves.spectrumFile", "waves.direction", "aboveWaterMass", "body(1).quadDrag.cd(1)", "body(1).quadDrag.cd(3)", "body(1).quadDrag.cd(5)"];
-	mcr.cases = {fileVec((1+numPar*(parCount-1)):numPar*parCount)', dirVec((1+numPar*(parCount-1)):numPar*parCount)', massVec((1+numPar*(parCount-1)):numPar*parCount)', surgeVec((1+numPar*(parCount-1)):numPar*parCount)', heaveVec((1+numPar*(parCount-1)):numPar*parCount)', pitchVec((1+numPar*(parCount-1)):numPar*parCount)'};
-
+	excFiles = excFileVec((1+numPar*(parCount-1)):numPar*parCount)';
+	waveDirs = dirVec((1+numPar*(parCount-1)):numPar*parCount)';
+	aboveWaterMasses = massVec((1+numPar*(parCount-1)):numPar*parCount)';
+	cdSurges = surgeVec((1+numPar*(parCount-1)):numPar*parCount)';
+	cdHeaves = heaveVec((1+numPar*(parCount-1)):numPar*parCount)';
+	cdPitches = pitchVec((1+numPar*(parCount-1)):numPar*parCount)';
 end
+
+
+for ii = 1:length(waveDirs)
+	load(excFiles(ii)); % load in data from excitation file
+	waveDir = waveDirs(ii);
+	aboveWaterMass = aboveWaterMasses(ii);
+	cdSurge = cdSurges(ii);
+	cdHeave = cdHeaves(ii);
+	cdPitch = cdPitches(ii);
+	caseFileVec(ii) = "caseFile"+num2str(ii)+".mat";
+	save(['caseFile',num2str(ii),'.mat'],'fExcTS', 'waveDir','aboveWaterMass','cdSurge','cdHeave','cdPitch')
+end
+
+mcr = struct();
+mcr.header = ["LoadFile"];
+mcr.cases = [caseFileVec'];
 
 % split all the mcr cases up so that they don't all try to run in 1
 % parallel loop - 50 cases at once seems reasonable

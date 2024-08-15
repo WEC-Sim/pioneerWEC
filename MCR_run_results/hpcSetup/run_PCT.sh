@@ -4,9 +4,9 @@ module load apps/matlab
 
 waveNums=(1 2 3 4)
 aboveWaterMasses=(-20 0 20 40)
-cdSurge=(2 4 6 8)
-cdHeave=(2 4 6 8)
-cdPitch=(2 4 6 8)
+cdSurge=(2 4 6 8) #(8 10 12 14 16)
+cdHeave=(0.5 1 1.5 2) #(0 1 2 3)
+cdPitch=(1 1.5 2 2.5) #(4 5 6 7 8)
 
 waveVec=()
 massVec=()

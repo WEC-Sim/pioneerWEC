@@ -12,7 +12,7 @@ simu.rampTime  = 0.05*simu.endTime;           % Wave Ramp Time [s]
 simu.solver    = 'ode23t';                    % simu.solver = 'ode4' for fixed step & simu.solver = 'ode45' for variable step 
 simu.dt        = 0.05; 					  	 % Simulation time-step [s]
 simu.cicEndTime = 30;
-% simu.mcrMatFile = 'mcrCases.mat';
+simu.mcrMatFile = 'mcrCases.mat';
 
 %% Wave Information 
 
@@ -30,14 +30,24 @@ simu.cicEndTime = 30;
 % waves.current.speed = .05;
 
 waveNum = 1;
-waveFiles = {'obsData/spectrumFile202.mat' 'obsData/spectrumFile313.mat' 'obsData/spectrumFile349.mat' 'obsData/spectrumFile419.mat'};
-waveDirs = [240.9309   48.4308  107.6652  108.3043];
+snips = [197 422 141 332];
+waveFiles = {'obsData/spectrumFile197.mat' 'obsData/spectrumFile422.mat' 'obsData/spectrumFile141.mat' 'obsData/spectrumFile332.mat'};
+waveDirs = [252.0421   56.5412  285.4639   97.5443];
 
 waves = waveClass('spectrumImport');      % Create the Wave Variable and Specify Type
 waves.spectrumFile = string(waveFiles(waveNum));  % Name of User-Defined Spectrum File 202 313 349 419
 waves.direction = waveDirs(waveNum); % 240.9309   48.4308  107.6652  108.3043
 waves.waterDepth = 30;
 waves.phaseSeed = 1;                      % Phase is seeded so eta is the same
+% load('obsData/spreadData.mat')
+% waves.direction = dirBins(:,waveNum);
+% waves.spread = binWeights(:,waveNum);
+
+% Instead of importing the wave spectrum into WEC-Sim, we create the excitation
+% force manually to include the frequency dependents wave direction and
+% load it in here
+excFiles = {'obsData/excitationForceWave1.mat' 'obsData/excitationForceWave2.mat' 'obsData/excitationForceWave3.mat' 'obsData/excitationForceWave4.mat'};
+load(string(excFiles(waveNum)));
 
 % Regular waves - run MCR for RAO
 % waves = waveClass('regularCIC');           % Initialize Wave Class and Specify Type
@@ -63,7 +73,7 @@ waves.current.direction = 270;
 
 %% Body Data
 % Float
-body(1)              = bodyClass('./hydrodata_SNL/wamitIRR1L1PCGCubitv2/wec_and_nsif_clean.h5');  
+body(1)              = bodyClass('./hydrodata_SNL/MultiDirectional/wec_and_nsif_clean.h5');  
 % this h5 file is cleaned BEM EXCEPT:
 % Body 1 CB adjusted based upon buoy diagram because the box modeled in BEM as
 % solid geometry
@@ -75,17 +85,18 @@ boxMass = boxVol*1025;
 cgToBox = 1.016 - .218 + .7493/2;
 boxInertia = boxMass*cgToBox;
 
-body(1).geometryFile = './geometry/float.stl';    
+body(1).geometryFile = './geometry/pnr_with_box.stl';    
 body(1).mass         = 3747; %'equilibrium';   +boxMass            
 body(1).inertia      = [7484 7484 1025*7.6135596];  % provided inertia in roll/pitch...unsure about yaw inertia +boxInertia
 body(1).quadDrag.area = [2.5553 2.5553 8.5634 8.5634 8.5634 1.0768];
-cdSurge = 8;
-cdHeave = 2;
-cdPitch = 6;
+cdSurge = 6;
+cdHeave = 0.5;
+cdPitch = 1.5;
 body(1).quadDrag.cd = [cdSurge, cdSurge, cdHeave, cdPitch, cdPitch, 0.5];
 body(1).meanDrift = 2;
+% body(1).nonlinearHydro = 2;
 
-aboveWaterMass = -20; % kg, above water mass, 1 m above CG (does NOT affect hydrostatics)
+aboveWaterMass = 20; % kg, above water mass, 1 m above CG (does NOT affect hydrostatics)
 aboveWaterMassLoc = [0 0 1]; %30*tan(mooringAngle)
 
 % NSIF

@@ -30,8 +30,8 @@ simu.mcrMatFile = 'mcrCases.mat';
 % waves.current.speed = .05;
 
 waveNum = 1;
-waveFiles = {'obsData/spectrumFile202.mat' 'obsData/spectrumFile313.mat' 'obsData/spectrumFile349.mat' 'obsData/spectrumFile419.mat'};
-waveDirs = [240.9309   48.4308  107.6652  108.3043];
+waveFiles = {'obsData/spectrumFile197.mat' 'obsData/spectrumFile422.mat' 'obsData/spectrumFile141.mat' 'obsData/spectrumFile332.mat'};
+waveDirs = [252.0421   56.5412  285.4639   97.5443];
 
 waves = waveClass('spectrumImport');      % Create the Wave Variable and Specify Type
 waves.spectrumFile = string(waveFiles(waveNum));  % Name of User-Defined Spectrum File 202 313 349 419
@@ -39,20 +39,19 @@ waves.direction = waveDirs(waveNum); % 240.9309   48.4308  107.6652  108.3043
 waves.waterDepth = 30;
 waves.phaseSeed = 1;                      % Phase is seeded so eta is the same
 
+excFiles = {'obsData/excitationForceWave1.mat' 'obsData/excitationForceWave2.mat' 'obsData/excitationForceWave3.mat' 'obsData/excitationForceWave4.mat'};
+load(string(excFiles(waveNum)));
+
+% Regular waves
+% waves = waveClass('regularCIC');           % Initialize Wave Class and Specify Type
+% waves.height = 1;                       % Significant Wave Height [m]
+% waves.period = 2:.25:10;                         % Peak Period [s]
+% waves.waterDepth = 30;
+% waves.direction = 0;
+
 waves.current.option = 1;
 waves.current.speed = .05;
 waves.current.direction = 270;
-
-% %% Wave Visualization Markers
-% % Example with a square mesh of visualization markers
-% marker = 20;
-% distance = 5;
-% [X,Y] = meshgrid(-marker:distance:marker,-marker:distance:marker);
-% waves.marker.location = [reshape(X,[],1),reshape(Y,[],1)]; % Marker Locations [X,Y]
-% clear('marker','distance','X','Y')
-% waves.marker.style = 1; % 1: Sphere, 2: Cube, 3: Frame.
-% waves.marker.size = 10; % Marker Size in Pixels
-% waves.marker.graphicColor = [1,0,0];
 
 %% Body Data
 % Float
@@ -61,7 +60,6 @@ body(1)              = bodyClass('./hydrodata_SNL/wamitIRR1L1PCGCubitv2/wec_and_
 % Body 1 CB adjusted based upon buoy diagram because the box modeled in BEM as
 % solid geometry
 % hydrostatic stiffness = 1000 N*m/rad added for each body in YAW
-% body(1).geometryFile = './geometry/float.stl';    
 
 % calculate the flooded box mass and inertia
 boxVol = 1.3557^2*0.7493;
@@ -69,16 +67,17 @@ boxMass = boxVol*1025;
 cgToBox = 1.016 - .218 + .7493/2;
 boxInertia = boxMass*cgToBox;
 
-body(1).mass         = 3747 + boxMass; %'equilibrium';              
-body(1).inertia      = [7484+boxInertia 7484+boxInertia 1025*7.6135596];  % provided inertia in roll/pitch...unsure about yaw inertia
+% body(1).geometryFile = './geometry/float.stl';    
+body(1).mass         = 3747; %'equilibrium';   +boxMass            
+body(1).inertia      = [7484 7484 1025*7.6135596];  % provided inertia in roll/pitch...unsure about yaw inertia +boxInertia
 body(1).quadDrag.area = [2.5553 2.5553 8.5634 8.5634 8.5634 1.0768];
-cdSurge = 0.5;
-cdHeave = 0.5;
-cdPitch = 0.5;
-body(1).quadDrag.cd = [cdSurge, 0.5, cdHeave, 0.5, cdPitch, 0.5];
+cdSurge = 8;
+cdHeave = 2;
+cdPitch = 6;
+body(1).quadDrag.cd = [cdSurge, cdSurge, cdHeave, cdPitch, cdPitch, 0.5];
 body(1).meanDrift = 2;
 
-aboveWaterMass = 100; % kg, above water mass, 1 m above CG (does NOT affect hydrostatics)
+aboveWaterMass = -20; % kg, above water mass, 1 m above CG (does NOT affect hydrostatics)
 aboveWaterMassLoc = [0 0 1]; %30*tan(mooringAngle)
 
 % NSIF
@@ -104,7 +103,7 @@ body(2).hydroStiffness(3:end,3:end) = [1.0990e-07, 2.4357e-04, -4.6197e-05, 0;
 
 % body(2).morisonElement.option = 1;  
 % body(2).morisonElement.cd = [0.5; 0.5; 0.5].';
-% body(2).morisonElement.ca = [1.9405 1.9405 1.2416];
+% % body(2).morisonElement.ca = [1.9405 1.9405 1.2416];
 % body(2).morisonElement.ca = [0 0 1.2416-1.9405];% 
 % body(2).morisonElement.VME = body(2).volume;
 % body(2).morisonElement.area = [3.0192 3.0192 2.3888];
@@ -180,5 +179,5 @@ mooring(1)  = mooringClass('mooring');
 mooring(1).location = [0.0 0.0 -9.500]; % assumed attached to approx bottom of NSIF
 
 % mooring 
-L0 = 30 - 9.5; % equilibrium length: make sure this is mooring.location + waves.waterDepth
+L0 = 30-9.5; % equilibrium length: make sure this is mooring.location + waves.waterDepth
 polyNom = fliplr([0, 9.2e3, -15e3, 0, 15e3]); % polynomial definition
