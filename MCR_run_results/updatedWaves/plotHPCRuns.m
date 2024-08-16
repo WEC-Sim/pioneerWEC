@@ -95,8 +95,8 @@ end
 % pitch response difference
 
 tuneVars = ["aboveWaterMass","cdSurge","cdHeave","cdPitch"];
-DOFs = ["Surge", "Heave", "Pitch"];
-DOFNums = [1 3 5];
+DOFs = ["Preferred Axis Translation", "Heave", "Preferred Axis Rotation","Secondary Axis Rotation"]; % "Secondary Axis Rotation",
+DOFNums = [1 3 5 4];
 
 % for directions, calculate the mean absolute percent error
 for ii = 1:length(mcrWave{1}.aboveWaterMass)
@@ -179,7 +179,7 @@ maxPercent = -inf*ones(1,4);
 xLims = [1.5 8.5; 0.25 2.25; .75 2.75; .75 2.75];
 
 figure('Position', [10 10 1000 400])
-for jj = 1:length(DOFs)
+for jj = 1:3%length(DOFs)
     subplot(1,3,jj)
     for ii = 1:4
         scatter(eval(strcat('mcrWave{',num2str(ii),'}.',cdList(jj))),errorValWave(:,jj,ii),'o')
@@ -214,8 +214,8 @@ ratio =  ps(4) / ps(3);
 paperWidth = 12;
 paperHeight = paperWidth*ratio;
 
-set(gcf, 'papersize', [paperWidth paperHeight]);
-set(gcf, 'PaperPosition', [0    0   paperWidth paperHeight]);
+% set(gcf, 'papersize', [paperWidth paperHeight]);
+% set(gcf, 'PaperPosition', [0    0   paperWidth paperHeight]);
 % set(gcf, 'PaperPosition', [0 0 10 4])
 % set(gcf, 'PaperSize', [10 4])
 % print(gcf, strcat('../../paperFigs/allSeaStatesRes.pdf'), '-dpdf', '-fillpage','-r1000','-image')
@@ -228,19 +228,23 @@ end
 
 obsPrimaryDirection = obsPrimaryDirection + 90;
 obsPrimaryDirection(obsPrimaryDirection>360) = obsPrimaryDirection(obsPrimaryDirection>360) - 360;
-% 
+
+% run these 2 lines first time then comment out if rerunning section
 % mcrOverall.primaryAxis = mcrOverall.primaryAxis + 90;
 % mcrOverall.primaryAxis(mcrOverall.primaryAxis>360) = mcrOverall.primaryAxis(mcrOverall.primaryAxis>360) - 360;
 
 figure()
-plot(mcrOverall.waveNum,mcrOverall.primaryAxis+90,'o')
+plot(mcrOverall.waveNum,mcrOverall.primaryAxis,'ok')
+% plot(1:4,primaryAxisOpt+90,'ok')
 hold on
-plot(1:4,obsPrimaryDirection+90,'*',MarkerSize=10)
-xlim([0.5 4.5])
+plot(1:4,obsPrimaryDirection,'*','MarkerEdgeColor',[0 0.5 0],'LineWidth', 1.5, MarkerSize=8)
+plot(1:4,waveDirs,'+b','LineWidth', 1.2,MarkerSize=8)
+xlim([0.75 4.25])
 % ylim([-20 310])
-legend('WEC-Sim','Observed',Location='northeast')
-xlabel('Wave Number')
+legend('WEC-Sim','Observed','Mean Wave Direction',Location='northeast')
+xlabel('Sea State')
 ylabel('Preferred Rotation Axis (deg)')
+set(gca,'Xtick',1:4)
 
 % set(gcf, 'PaperPosition', [0 0 5 4])
 % set(gcf, 'PaperSize', [5 4])
@@ -248,11 +252,11 @@ ylabel('Preferred Rotation Axis (deg)')
 
 %% Plot summed error
 
-cdList = ["cdSurge","cdHeave","cdPitch"];
-cdLabels = ["C_{D,surge}","C_{D,heave}","C_{D,pitch}"];
+%cdList = ["cdSurge","cdHeave","cdPitch"];
+%cdLabels = ["C_{D,surge}","C_{D,heave}","C_{D,pitch}"];
 unitsStr = ["m","m","rad"];
 figure('Position', [10 10 800 600])
-xLims = [1.5 8.5; 0.25 2.25; .75 2.75; .75 2.75];
+xLims = [1 9; 0.25 2.25; .75 2.75; .75 2.75];
 
 for ii = 1:length(cdList)
     subplot(2,2,ii)
@@ -261,6 +265,9 @@ for ii = 1:length(cdList)
     ylabel(strcat('Weighted Error (%)'))
     title(DOFs(ii))
     xlim(xLims(ii,:))
+    if ii == 3
+        ylim([6 22])
+    end
 end
 
 surgeInd = find(mcrWave{1}.cdSurge == 6);
@@ -268,17 +275,37 @@ heaveInd = find(mcrWave{1}.cdHeave == 0.5);
 pitchInd = find(mcrWave{1}.cdPitch == 1.5);
 optInds = intersect(intersect(surgeInd, heaveInd),pitchInd);
 
-subplot(2,2,4)
-scatter(mcrWave{1}.aboveWaterMass(optInds),errorValSum(optInds,3),'ok','filled')
-xlabel('Above Water Inertia (kgm^2)')
-ylabel(strcat('Weighted Error (%)'))
-title('Pitch')
+for ii = 1:4
+    primaryAxisOpt(ii) = mcrWave{ii}.primaryAxis(optInds(2));
+end
+
+% subplot(2,2,4)
+% scatter(mcrWave{1}.aboveWaterMass(optInds),errorValSum(optInds,3),'ok','filled')
+% xlabel('Above Water Inertia (kgm^2)')
+% ylabel(strcat('Weighted Error (%)'))
+% title('Pitch')
 %xlim([-22,42])
 
 % set(gcf, 'PaperPosition', [0 0 8 6])
 % set(gcf, 'PaperSize', [8 6])
 % print(gcf, strcat('../../paperFigs/weightedError.pdf'), '-dpdf', '-fillpage','-r1000','-image')
 
+%% Plot for above water inertia
+surgeInd = find(mcrWave{1}.cdSurge == 6);
+heaveInd = find(mcrWave{1}.cdHeave == 0.5);
+pitchInd = find(mcrWave{1}.cdPitch == 1.5);
+optInds = intersect(intersect(surgeInd, heaveInd),pitchInd);
+
+figure()
+scatter(mcrWave{1}.aboveWaterMass(optInds),errorValSum(optInds,3),'ok','filled')
+xlabel('Above Water Inertia (kgm^2)')
+ylabel(strcat('Weighted Error (%)'))
+title('Pitch')
+xlim([-23,43])
+
+% set(gcf, 'PaperPosition', [0 0 5 4])
+% set(gcf, 'PaperSize', [5 4])
+% print(gcf, strcat('../../paperFigs/aboveWaterInertia.pdf'), '-dpdf', '-fillpage','-r1000','-image')
 
 %% Plot combinations for all waves and each degree of freedom
 for ii = 1:length(DOFs)

@@ -5,14 +5,14 @@ simu.simMechanicsFile = 'pioneerSNL.slx';
 simu.mode      = 'normal';                   % Specify Simulation Mode ('normal','accelerator','rapid-accelerator')
 simu.explorer  = 'on';                       % Turn SimMechanics Explorer (on/off)
 simu.startTime = 0;                          % Simulation Start Time [s]
-simu.endTime   = 1300;                      % Simulation End Time [s]
+simu.endTime   = 400;                      % Simulation End Time [s]
 simu.rampTime  = 0.05*simu.endTime;           % Wave Ramp Time [s]
 %%% Note from Dom: ode23t or other mod stiff tends to work better with the inverse trig
 %%% functions in custom mooring and the cable approximation. 
 simu.solver    = 'ode23t';                    % simu.solver = 'ode4' for fixed step & simu.solver = 'ode45' for variable step 
 simu.dt        = 0.05; 					  	 % Simulation time-step [s]
 simu.cicEndTime = 30;
-simu.mcrMatFile = 'mcrCases.mat';
+% simu.mcrMatFile = 'mcrCases.mat';
 
 %% Wave Information 
 
@@ -43,9 +43,9 @@ waves.phaseSeed = 1;                      % Phase is seeded so eta is the same
 % waves.direction = dirBins(:,waveNum);
 % waves.spread = binWeights(:,waveNum);
 
-% Instead of importing the wave spectrum into WEC-Sim, we create the excitation
-% force manually to include the frequency dependents wave direction and
-% load it in here
+% % Instead of importing the wave spectrum into WEC-Sim, we create the excitation
+% % force manually to include the frequency dependents wave direction and
+% % load it in here
 excFiles = {'obsData/excitationForceWave1.mat' 'obsData/excitationForceWave2.mat' 'obsData/excitationForceWave3.mat' 'obsData/excitationForceWave4.mat'};
 load(string(excFiles(waveNum)));
 
@@ -56,9 +56,9 @@ load(string(excFiles(waveNum)));
 % waves.waterDepth = 30;
 % waves.direction = 0;
 
-waves.current.option = 1;
-waves.current.speed = .05;
-waves.current.direction = 270;
+% waves.current.option = 1;
+% waves.current.speed = .05;
+% waves.current.direction = 270;
 
 % %% Wave Visualization Markers
 % % Example with a square mesh of visualization markers
@@ -96,7 +96,7 @@ body(1).quadDrag.cd = [cdSurge, cdSurge, cdHeave, cdPitch, cdPitch, 0.5];
 body(1).meanDrift = 2;
 % body(1).nonlinearHydro = 2;
 
-aboveWaterMass = 20; % kg, above water mass, 1 m above CG (does NOT affect hydrostatics)
+aboveWaterMass = 0; % kg, above water mass, 1 m above CG (does NOT affect hydrostatics)
 aboveWaterMassLoc = [0 0 1]; %30*tan(mooringAngle)
 
 % NSIF

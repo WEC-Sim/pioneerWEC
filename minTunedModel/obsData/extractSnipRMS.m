@@ -44,7 +44,8 @@ for ii = 1:length(snips)
     % convert to primary and secondary axes:
     processedData{ii}.primaryAxis = peakAngle;
     processedData{ii}.primaryAxisWS = 360 - (peakAngle + 90); % convert to WEC-Sim coordinate axes
-    processedData{ii}.rmsRotPS = rms(processedData{ii}.NEDGyrVel*rotz(peakAngle));
+    processedData{ii}.NEDGyrVelPS = processedData{ii}.NEDGyrVel*rotz(peakAngle);
+    processedData{ii}.rmsRotPS = rms(processedData{ii}.NEDGyrVelPS);
 
     dt = processedData{ii}.NEDTime(2) - processedData{ii}.NEDTime(1);
     % High Pass filter the accelerometer data to get less drift
@@ -54,12 +55,12 @@ for ii = 1:length(snips)
         'DesignMethod','kaiserwin', ...  % Design method
         'SampleRate',1/dt);               % Sample rate
     
-    processedData{ii}.NEDAcc = NED_IMU.Acc(NED_IMU.Info.StartIndex(snips(ii)):NED_IMU.Info.EndIndex(snips(ii)),:)*rotz(peakAngle);
+    processedData{ii}.NEDAccPS = NED_IMU.Acc(NED_IMU.Info.StartIndex(snips(ii)):NED_IMU.Info.EndIndex(snips(ii)),:)*rotz(peakAngle);
     vel = cumtrapz(processedData{ii}.NEDTime,processedData{ii}.NEDAcc(:,:));
     velNew = filter(d,vel);
-    processedData{ii}.NEDVel = velNew(startIndVel:end,:);
+    processedData{ii}.NEDVelPS = velNew(startIndVel:end,:);
     processedData{ii}.rmsTransPS = rms(velNew(startIndVel:end,:));
 
 end
 
-save processedDataPS.mat processedData
+% save processedDataPS.mat processedData

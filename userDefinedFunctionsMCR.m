@@ -1,7 +1,7 @@
 %% User Defined Functions for MCR run
 
 % find 100 s
-[~,startInd] = min(abs(200-output.bodies(1).time));
+[~,startInd] = min(abs(100-output.bodies(1).time));
 
 
 mcr.posRMS(imcr,:) = rms(output.bodies(1).position(startInd:end,:));

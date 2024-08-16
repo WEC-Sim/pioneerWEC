@@ -112,7 +112,7 @@ for ii = 1:length(mcrWave{1}.aboveWaterMass)
 end
 
 errorValDirMorison = errorValDir;
-save('../errorDirMorison.mat', 'errorValDirMorison')
+% save('../errorDirMorison.mat', 'errorValDirMorison')
 
 %% Plot each dof error
 cdList = ["cdSurge","cdHeave","cdPitch"];
