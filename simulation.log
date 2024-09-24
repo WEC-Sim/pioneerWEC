@@ -5,31 +5,29 @@ Version: 6.0
 
 Initializing the Simulation Class...
 	Case Dir: C:\Users\jtgrasb\Documents\GitHub\pioneerSNL_Dom 
-wecSimMCR Case 33
-Elapsed time is 1.093477 seconds.
+Elapsed time is 4.980717 seconds.
 
 WEC-Sim Pre-processing ...   
 [Warning: Because water depth is specified in the wecSimInputFile, the water depth from the BEM data is ignored] 
 [> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('waveClass/setWaterDepth', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\objects\waveClass.m', 571)" style="font-weight:bold">waveClass/setWaterDepth</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\objects\waveClass.m',571,0)">line 571</a>)
 In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('waveClass/setup', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\objects\waveClass.m', 253)" style="font-weight:bold">waveClass/setup</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\objects\waveClass.m',253,0)">line 253</a>)
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('initializeWecSim', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\functions\initializeWecSim.m', 257)" style="font-weight:bold">initializeWecSim</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\functions\initializeWecSim.m',257,0)">line 257</a>)
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('initializeWecSim', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\functions\initializeWecSim.m', 256)" style="font-weight:bold">initializeWecSim</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\functions\initializeWecSim.m',256,0)">line 256</a>)
 In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('run', 'C:\Program Files\MATLAB\R2023b\toolbox\matlab\lang\run.m', 99)" style="font-weight:bold">run</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2023b\toolbox\matlab\lang\run.m',99,0)">line 99</a>)
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('wecSim', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSim.m', 43)" style="font-weight:bold">wecSim</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSim.m',43,0)">line 43</a>)
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('wecSimMCR', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSimMCR.m', 92)" style="font-weight:bold">wecSimMCR</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSimMCR.m',92,0)">line 92</a>)] 
-Elapsed time is 0.219055 seconds.
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('wecSim', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSim.m', 43)" style="font-weight:bold">wecSim</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSim.m',43,0)">line 43</a>)] 
+	"spectrumImport" uses the number of imported wave frequencies (not "Traditional" or "EqualEnergy")
+Elapsed time is 1.009205 seconds.
 
 WEC-Sim Simulation Settings:
 	Start Time                     (sec) = 0
-	End Time                       (sec) = 400
+	End Time                       (sec) = 1200
 	Time Step Size                 (sec) = 0.05
-	Ramp Function Time             (sec) = 20
+	Ramp Function Time             (sec) = 60
 	Convolution Integral Interval  (sec) = 30
-	 Number of Time Steps     = 8000 
+	 Number of Time Steps     = 24000 
 
 Wave Environment: 
-	Wave Type                            = Regular Waves (Convolution Integral Calculation)
-	Wave Height, height (m)                   = 1
-	Wave Period, period (sec)                 = 10
+	Wave Type                            = Irregular waves with imported wave spectrum (Seeded Phase)
+	Spectrum Type                        = Imported Spectrum 
 
 List of Body: Number of Bodies = 1 
 
@@ -59,22 +57,22 @@ List of Constraint(s): Number of Constraints = 1
 
 
 Simulating the WEC device defined in the SimMechanics model C:\Users\jtgrasb\Documents\GitHub\pioneerSNL_Dom\pioneerSNL.slx...   
-Elapsed time is 0.494862 seconds.
-Elapsed time is 29.859551 seconds.
+Elapsed time is 5.515178 seconds.
+Elapsed time is 115.097068 seconds.
 
 Post-processing and saving...   
 
  Wave Number: 1
  RMS with respect to wave direction. 
- Angle: 0.000000 
- RMS: 0.253973, 0.000051, 0.218675, 0.000096, 0.009252, 0.000048 
+ Angle: 252.042100 
+ RMS: 0.316838, 0.246928, 0.456534, 0.209252, 0.244661, 0.011853 
  
 RMS with respect to primary axis (WEC-Sim). 
- Angle: 0.000000 
- RMS: 0.253973, 0.000051, 0.218675, 0.000096, 0.009252, 0.000048 
+ Angle: 255.042100 
+ RMS: 0.315643, 0.248454, 0.456534, 0.209134, 0.244763, 0.011853 
  
 RMS with respect to primary axis (Observed). 
  Angle: 252.042065 
  RMS: 0.312025, 0.231264, 0.488876, 0.157954, 0.250978, 0.053158 
  
-Elapsed time is 0.488814 seconds.
+Elapsed time is 1.705281 seconds.

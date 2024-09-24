@@ -5,7 +5,7 @@ simu.simMechanicsFile = 'pioneerSNL.slx';
 simu.mode      = 'normal';                   % Specify Simulation Mode ('normal','accelerator','rapid-accelerator')
 simu.explorer  = 'on';                       % Turn SimMechanics Explorer (on/off)
 simu.startTime = 0;                          % Simulation Start Time [s]
-simu.endTime   = 400;                      % Simulation End Time [s]
+simu.endTime   = 1200;                      % Simulation End Time [s]
 simu.rampTime  = 0.05*simu.endTime;           % Wave Ramp Time [s]
 %%% Note from Dom: ode23t or other mod stiff tends to work better with the inverse trig
 %%% functions in custom mooring and the cable approximation. 
@@ -52,7 +52,7 @@ load(string(excFiles(waveNum)));
 % Regular waves - run MCR for RAO
 % waves = waveClass('regularCIC');           % Initialize Wave Class and Specify Type
 % waves.height = 1;                       % Significant Wave Height [m]
-% waves.period = 2:.25:10;                         % Peak Period [s]
+% waves.period = 2:2:10;                         % Peak Period [s]
 % waves.waterDepth = 30;
 % waves.direction = 0;
 

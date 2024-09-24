@@ -97,21 +97,21 @@ for ii = 1:length(snips)
         'SampleRate',1/dt);               % Sample rate
 
     vel = cumtrapz(processedData{ii}.NEDTime,processedData{ii}.NEDAcc(:,:));
-    velNew = filter(d,vel);
+    velNew = filtfilt(d,vel);
     pos = cumtrapz(processedData{ii}.NEDTime,velNew);
-    posNew = filter(d,pos);
+    posNew = filtfilt(d,pos);
 
     gyrVel = cumtrapz(processedData{ii}.NEDTime,processedData{ii}.NEDGyrAcc(:,:));
-    gyrVelNew = filter(d,gyrVel);
+    gyrVelNew = filtfilt(d,gyrVel);
     gyrPos = cumtrapz(processedData{ii}.NEDTime,gyrVelNew);
-    gyrPosNew = filter(d,gyrPos);
+    gyrPosNew = filtfilt(d,gyrPos);
 
-    processedData{ii}.NEDVel = velNew(startIndVel:end,:);
-    processedData{ii}.NEDPos = posNew(startIndPos:end,:);
-    processedData{ii}.NEDVelSTD = std(velNew(startIndVel:end,:));
-    processedData{ii}.NEDPosSTD = std(posNew(startIndPos:end,:));
-    processedData{ii}.NEDGyrPos = gyrPosNew(startIndPos:end,:);
-    processedData{ii}.NEDGyrPosSTD = std(gyrPosNew(startIndPos:end,:));
+    processedData{ii}.NEDVel = velNew;
+    processedData{ii}.NEDPos = posNew;
+    processedData{ii}.NEDVelSTD = std(velNew);
+    processedData{ii}.NEDPosSTD = std(posNew);
+    processedData{ii}.NEDGyrPos = gyrPosNew;
+    processedData{ii}.NEDGyrPosSTD = std(gyrPosNew);
 
     disp([processedData{ii}.NEDVelSTD([1 3]),processedData{ii}.NEDGyrVelSTD(2)])
     % 

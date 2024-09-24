@@ -56,10 +56,21 @@ for ii = 1:length(snips)
     
     processedData{ii}.NEDAcc = NED_IMU.Acc(NED_IMU.Info.StartIndex(snips(ii)):NED_IMU.Info.EndIndex(snips(ii)),:)*rotz(peakAngle);
     vel = cumtrapz(processedData{ii}.NEDTime,processedData{ii}.NEDAcc(:,:));
-    velNew = filter(d,vel);
-    processedData{ii}.NEDVel = velNew(startIndVel:end,:);
-    processedData{ii}.rmsTransPS = rms(velNew(startIndVel:end,:));
+    velNew = filtfilt(d,vel);
+    processedData{ii}.NEDVel = velNew; %(startIndVel:end,:)
+    processedData{ii}.rmsTransPS = rms(velNew);
 
+    figure()
+    plot(processedData{ii}.NEDTime,processedData{ii}.NEDAcc(:,2))
+    hold on
+    plot(processedData{ii}.NEDTime,processedData{ii}.NEDVel(:,2))
+
+    gyrPos = cumtrapz(processedData{ii}.NEDTime,processedData{ii}.NEDGyrVel(:,:));
+    gyrPosNew = filtfilt(d,gyrPos);
+    processedData{ii}.NEDGyrPos = gyrPosNew; %(startIndVel:end,:)
+
+    plot(processedData{ii}.NEDTime,processedData{ii}.NEDGyrPos(:,2))
+    legend('acc','vel','gyrPos')
 end
 
 save processedDataPS.mat processedData
