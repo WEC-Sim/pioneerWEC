@@ -10,8 +10,8 @@ snips = [197 422 141 332];
 nBins = 10; % this is the number of direction bins (recommend odd number)
 processedData = {};
 
-fileTime = ncread('./dir_comparison/ooiSpectra-mab/WSS_MARK.nc','time'); %WSS_MARK
-Hm0 = ncread('./dir_comparison/ooiSpectra-mab/WSS_MARK.nc','significant_wave_height');
+fileTime = ncread('./all_comparison/ooiSpectra-mab/WSS_MARK.nc','time'); %WSS_MARK
+Hm0 = ncread('./all_comparison/ooiSpectra-mab/WSS_MARK.nc','significant_wave_height');
 
 rho = 1000;
 g = 9.81;
@@ -159,10 +159,10 @@ for ii = 1:4
     % pre-calculate excitation force (frequency dependent direction and spread)
     clear dirPts spreadBins outDirPts checkSum spreadBins temp binWeights temp2 dirBins fExcRe fExcIm fExcMd
     
-    hydroData = readBEMIOH5('../hydrodata_SNL/wamitIRR1L1PCGCubitv2/wec_and_nsif_clean.h5',1,2);
-    body(1) = bodyClass('../hydrodata_SNL/wamitIRR1L1PCGCubitv2/wec_and_nsif_clean.h5');
+    hydroData = readBEMIOH5('../hydrodata/wec_and_nsif_clean.h5',1,2);
+    body(1) = bodyClass('../hydrodata/wec_and_nsif_clean.h5');
     %hydroForcePre(body,body.hydroData.simulation_parameters.w,body.hydroData.simulation_parameters.direction,30,
-    loadHydroData(body,hydroData);
+    loadHydroData(body,hydroData,1);
     % example first wave snippet
     [WGRD,DGRD]=meshgrid(body.hydroData.simulation_parameters.w,[body.hydroData.simulation_parameters.direction, 360]);  % wrap 0 to 360 degrees
     for k=1:length(2*pi*dataWaves.freq_Hz(~isnan(dataWaves.dirMeanToNorth_deg(:,waveIndex(waveNum))),waveIndex(waveNum)))

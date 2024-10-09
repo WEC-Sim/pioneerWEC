@@ -8,7 +8,7 @@ mcrOverall = {};
 
 load(files(1).name)
 mcrOverall = mcrNew;
-waveDirs = [252.0421   56.5412  285.4639   97.5443];
+% waveDirs = [252.0421   56.5412  285.4639   97.5443];
 waveNums = [1 2 3 4];
 weights = [.48 .22 .21 .09];
 
@@ -163,7 +163,7 @@ for ii = 1:4
 
     % set(gcf, 'PaperPosition', [0 0 6 10])
     % set(gcf, 'PaperSize', [6 10])
-    % print(gcf, strcat('../paperFigs/seaState',num2str(ii),'.pdf'), '-dpdf', '-fillpage','-r1000','-image')
+    % print(gcf, strcat('../paperFigs/seaState',num2str(ii),'.pdf'), '-dpdf', '-fillpage','-r1000','-vector')
 end
 
 %% Plot all dofs in a subplot for each sea state - All 4 sea states on 1 plot!
@@ -218,37 +218,34 @@ paperHeight = paperWidth*ratio;
 % set(gcf, 'PaperPosition', [0    0   paperWidth paperHeight]);
 % set(gcf, 'PaperPosition', [0 0 10 4])
 % set(gcf, 'PaperSize', [10 4])
-% print(gcf, strcat('../../paperFigs/allSeaStatesRes.pdf'), '-dpdf', '-fillpage','-r1000','-image')
+% print(gcf, strcat('../../paperFigs/allSeaStatesRes.pdf'), '-dpdf', '-fillpage','-r1000','-vector')
 
-%% Plot primary axis angle
+%% Plot preferred axis angle
 
 for ii = 1:4
-    obsPrimaryDirection(ii) = processedData{ii}.meanWaveDirWS;
+    obsPrimaryDirection(ii) = processedData{ii}.primaryAxisWS;
+    waveDirs(ii) = processedData{ii}.meanWaveDirWS;
 end
 
-obsPrimaryDirection = obsPrimaryDirection + 90;
-obsPrimaryDirection(obsPrimaryDirection>360) = obsPrimaryDirection(obsPrimaryDirection>360) - 360;
-
-% run these 2 lines first time then comment out if rerunning section
-% mcrOverall.primaryAxis = mcrOverall.primaryAxis + 90;
-% mcrOverall.primaryAxis(mcrOverall.primaryAxis>360) = mcrOverall.primaryAxis(mcrOverall.primaryAxis>360) - 360;
+% add 90 degrees to WEC-Sim preferred angle such that primaryAxis is about
+% which angle the pitch is maximized
+mcrOverall.preferredAngle = mcrOverall.primaryAxis - 90;
 
 figure()
-plot(mcrOverall.waveNum,mcrOverall.primaryAxis,'ok')
-% plot(1:4,primaryAxisOpt+90,'ok')
+plot(mcrOverall.waveNum,mcrOverall.preferredAngle,'ok')
 hold on
 plot(1:4,obsPrimaryDirection,'*','MarkerEdgeColor',[0 0.5 0],'LineWidth', 1.5, MarkerSize=8)
 plot(1:4,waveDirs,'+b','LineWidth', 1.2,MarkerSize=8)
 xlim([0.75 4.25])
 % ylim([-20 310])
-legend('WEC-Sim','Observed','Mean Wave Direction',Location='northeast')
+legend('WEC-Sim','Observed','Mean Wave Direction','Position',[0.35 0.75 0.1 0.1])
 xlabel('Sea State')
 ylabel('Preferred Rotation Axis (deg)')
 set(gca,'Xtick',1:4)
 
 % set(gcf, 'PaperPosition', [0 0 5 4])
 % set(gcf, 'PaperSize', [5 4])
-% print(gcf, strcat('../../paperFigs/preferredAxis.pdf'), '-dpdf', '-fillpage','-r1000','-image')
+% print(gcf, strcat('../../paperFigs/preferredAxis.pdf'), '-dpdf', '-fillpage','-r1000','-vector')
 
 %% Plot summed error
 
@@ -288,7 +285,7 @@ end
 
 % set(gcf, 'PaperPosition', [0 0 8 6])
 % set(gcf, 'PaperSize', [8 6])
-% print(gcf, strcat('../../paperFigs/weightedError.pdf'), '-dpdf', '-fillpage','-r1000','-image')
+% print(gcf, strcat('../../paperFigs/weightedError.pdf'), '-dpdf', '-fillpage','-r1000','-vector')
 
 %% Plot for above water inertia
 surgeInd = find(mcrWave{1}.cdSurge == 6);
@@ -305,7 +302,7 @@ xlim([-23,43])
 
 % set(gcf, 'PaperPosition', [0 0 5 4])
 % set(gcf, 'PaperSize', [5 4])
-% print(gcf, strcat('../../paperFigs/aboveWaterInertia.pdf'), '-dpdf', '-fillpage','-r1000','-image')
+% print(gcf, strcat('../../paperFigs/aboveWaterInertia.pdf'), '-dpdf', '-fillpage','-r1000','-vector')
 
 %% Plot combinations for all waves and each degree of freedom
 for ii = 1:length(DOFs)

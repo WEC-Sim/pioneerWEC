@@ -60,6 +60,7 @@ end
 % Find maximum value for the primary axis
 [RMSPeak,AngleIndex] = max(velocityRotCheck(:,2)); % find max pitch response
 PeakAngle = Angle(AngleIndex);
+peakAngle = peakAngle + 90; % preferred axis angle is the axis about which maximum pitch occurs
 OffPeak = SecondaryAxis(AngleIndex);
 
 % convert to primary and secondary axes:
