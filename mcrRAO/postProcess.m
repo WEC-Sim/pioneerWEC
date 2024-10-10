@@ -2,7 +2,7 @@
 % close all
 % clc
 % 
-load('mcrResRAORegCIC.mat');
+load('mcrResRAOReg.mat');
 % 
 % load('obsData/processedDataPS')
 
@@ -49,10 +49,11 @@ else
     plot(mcr.cases(:,2),mcr.posAmpXY(:,[5])*180/pi,'-k')
     ylabel(strcat('Pitch Response (',char(176),')'))
     xlabel('Period (s)')
-
+    xlim([2, 10])
+    
     % set(gcf, 'PaperPosition', [0 0 5 4])
     % set(gcf, 'PaperSize', [5 4])
-    % print(gcf, strcat('./paperFigs/RAO.pdf'), '-dpdf', '-fillpage','-r1000','-image')
+    % print(gcf, strcat('../paperFigs/RAO.pdf'), '-dpdf', '-fillpage','-r1000','-vector')
 
     figure()
     plot(1./mcr.cases(:,2),mcr.excForceAmpXY(:,[1])./(mcr.velAmpXY(:,[1])*180/pi),'-.k')
@@ -68,10 +69,11 @@ else
     semilogx(1./mcr.cases(:,2),mcr.excForceAmpXY(:,[5])./(mcr.velAmpXY(:,[5])*180/pi),'-k')
     ylabel(strcat('Pitch Impedance Magnitude (Nms/',char(176),')'))
     xlabel('Frequency (Hz)')
+    xlim([.1, .5])
     
     % set(gcf, 'PaperPosition', [0 0 5 4])
     % set(gcf, 'PaperSize', [5 4])
-    % print(gcf, strcat('./paperFigs/Impedance.pdf'), '-dpdf', '-fillpage','-r1000','-image')
+    % print(gcf, strcat('../paperFigs/Impedance.pdf'), '-dpdf', '-fillpage','-r1000','-vector')
 
 end
 
