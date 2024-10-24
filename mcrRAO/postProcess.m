@@ -2,7 +2,7 @@
 % close all
 % clc
 % 
-load('mcrResRAOReg.mat');
+load('mcrResPCT.mat');
 % 
 % load('obsData/processedDataPS')
 

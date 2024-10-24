@@ -59,6 +59,10 @@ end
 % compare the rms for each run to the standard deviations
 % from the observed data
 load('../../obsData/processedDataPS')
+for ii = 1:length(processedData)
+    processedData{ii}.rmsTransPS = abs(processedData{ii}.rmsTransPS*rotz(90));
+    processedData{ii}.rmsRotPS = abs(processedData{ii}.rmsRotPS*rotz(90));
+end
 for ii = 1:length(mcrOverall.aboveWaterMass)
     mcrOverall.velRMSDiff(ii,1:3) = processedData{mcrOverall.waveNum(ii)}.rmsTransPS - mcrOverall.velRMSPS(ii,1:3);
     mcrOverall.velRMSDiff(ii,4:6) = (processedData{mcrOverall.waveNum(ii)}.rmsRotPS - mcrOverall.velRMSPS(ii,4:6))*180/pi;
@@ -138,7 +142,7 @@ end
 %% Plot all dofs in a subplot for each sea state
 
 cdList = ["cdSurge","cdHeave","cdPitch"];
-cdLabels = ["C_{D,surge}","C_{D,heave}","C_{D,pitch}"];
+cdLabels = ["C_{d,surge}","C_{d,heave}","C_{d,pitch}"];
 unitsStr = ["m","m","rad"];
 for ii = 1:4
     figure('Position', [10 10 400 600])
@@ -169,7 +173,7 @@ end
 %% Plot all dofs in a subplot for each sea state - All 4 sea states on 1 plot!
 
 cdList = ["cdSurge","cdHeave","cdPitch","cdPitch"];
-cdLabels = ["C_{D,surge}","C_{D,heave}","C_{D,pitch}","C_{D,pitch}"];
+cdLabels = ["C_{d,surge}","C_{d,heave}","C_{d,pitch}","C_{d,pitch}"];
 unitsStr = ["m","m",char(176),char(176)];
 
 % find minimum percentages for each dof
@@ -207,7 +211,7 @@ for jj = 1:3%length(DOFs)
     end
 end
 
-legend(["Sea State 1","Sea State 2","Sea State 3","Sea State 4"],Location="southeast")
+legend(["Sea State A","Sea State B","Sea State C","Sea State D"],Location="southeast")
 
 ps = get(gcf, 'Position');
 ratio =  ps(4) / ps(3);
@@ -250,7 +254,7 @@ set(gca,'Xtick',1:4)
 %% Plot summed error
 
 %cdList = ["cdSurge","cdHeave","cdPitch"];
-%cdLabels = ["C_{D,surge}","C_{D,heave}","C_{D,pitch}"];
+%cdLabels = ["C_{d,surge}","C_{d,heave}","C_{d,pitch}"];
 unitsStr = ["m","m","rad"];
 figure('Position', [10 10 800 600])
 xLims = [1 9; 0.25 2.25; .75 2.75; .75 2.75];

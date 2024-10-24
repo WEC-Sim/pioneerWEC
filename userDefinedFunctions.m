@@ -59,17 +59,17 @@ for qa = 1:length(Angle)
 end
 % Find maximum value for the primary axis
 [RMSPeak,AngleIndex] = max(velocityRotCheck(:,2)); % find max pitch response
-PeakAngle = Angle(AngleIndex);
+peakAngle = Angle(AngleIndex);
 peakAngle = peakAngle + 90; % preferred axis angle is the axis about which maximum pitch occurs
 OffPeak = SecondaryAxis(AngleIndex);
 
 % convert to primary and secondary axes:
-waveAngleN = PeakAngle;
-output.bodies(1).positionPS = [output.bodies(1).position(:,1:3)*rotz(PeakAngle),output.bodies(1).position(:,4:6)*rotz(PeakAngle)];
-output.bodies(1).velocityPS = [output.bodies(1).velocity(:,1:3)*rotz(PeakAngle),output.bodies(1).velocity(:,4:6)*rotz(PeakAngle)];
-output.bodies(1).accelerationPS = [output.bodies(1).acceleration(:,1:3)*rotz(PeakAngle),output.bodies(1).acceleration(:,4:6)*rotz(PeakAngle)];
+waveAngleN = peakAngle;
+output.bodies(1).positionPS = [output.bodies(1).position(:,1:3)*rotz(peakAngle),output.bodies(1).position(:,4:6)*rotz(peakAngle)];
+output.bodies(1).velocityPS = [output.bodies(1).velocity(:,1:3)*rotz(peakAngle),output.bodies(1).velocity(:,4:6)*rotz(peakAngle)];
+output.bodies(1).accelerationPS = [output.bodies(1).acceleration(:,1:3)*rotz(peakAngle),output.bodies(1).acceleration(:,4:6)*rotz(peakAngle)];
 
-fprintf("RMS with respect to primary axis (WEC-Sim). \n Angle: %f \n RMS: %f, %f, %f, %f, %f, %f \n \n",PeakAngle,rms(output.bodies(1).velocityPS(:,:)))
+fprintf("RMS with respect to primary axis (WEC-Sim). \n Angle: %f \n RMS: %f, %f, %f, %f, %f, %f \n \n",peakAngle,rms(output.bodies(1).velocityPS(:,:)))
 
 % RMS from observed data
 % compare the rms for each run to the standard deviations
@@ -82,6 +82,8 @@ velRMSPercentDiff(1:3) = 100*(processedData{waveNum}.rmsTransPS - rms(output.bod
 velRMSPercentDiff(4:6) = 100*(processedData{waveNum}.rmsRotPS - rms(output.bodies(1).velocityPS(:,4:6)))./processedData{waveNum}.rmsRotPS;
 
 fprintf("RMS with respect to primary axis (Observed). \n Angle: %f \n RMS: %f, %f, %f, %f, %f, %f \n \n",processedData{waveNum}.meanWaveDirWS,processedData{waveNum}.rmsTransPS,processedData{waveNum}.rmsRotPS)
+
+save ss1_res.mat
 
 % % compare excitation force to Dom's calculations
 % load('./obsData/excitationForce.mat')
