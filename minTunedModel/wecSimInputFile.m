@@ -73,7 +73,7 @@ waves.current.direction = 270;
 
 %% Body Data
 % Float
-body(1)              = bodyClass('./hydroData/wec_and_nsif_clean.h5');  
+body(1)              = bodyClass('./hydroData/wec_and_nsif_clean_cb_corrected.h5');  
 % this h5 file is cleaned BEM EXCEPT:
 % Body 1 CB adjusted based upon buoy diagram because the box modeled in BEM as
 % solid geometry

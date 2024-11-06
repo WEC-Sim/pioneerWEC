@@ -51,8 +51,8 @@ simu.cicEndTime = 30;
 
 % Regular waves - run MCR for RAO
 waves = waveClass('regularCIC');           % Initialize Wave Class and Specify Type
-waves.height = 1;                       % Significant Wave Height [m]
-waves.period = 1:.25:10;                         % Peak Period [s]
+waves.height = .5;                       % Significant Wave Height [m]
+waves.period = 2:.25:10;                         % Peak Period [s]
 waves.waterDepth = 30;
 waves.direction = 0;
 
@@ -89,14 +89,14 @@ body(1).geometryFile = './geometry/pnr_with_box.stl';
 body(1).mass         = 3747; %'equilibrium';   +boxMass            
 body(1).inertia      = [7484 7484 1025*7.6135596];  % provided inertia in roll/pitch...unsure about yaw inertia +boxInertia
 body(1).quadDrag.area = [2.5553 2.5553 8.5634 8.5634 8.5634 1.0768];
-cdSurge = 6;
+cdSurge = 4;
 cdHeave = 0.5;
-cdPitch = 1.5;
+cdPitch = 1;
 body(1).quadDrag.cd = [cdSurge, cdSurge, cdHeave, cdPitch, cdPitch, 0.5];
 body(1).meanDrift = 2;
 % body(1).nonlinearHydro = 2;
 
-aboveWaterMass = 0; % kg, above water mass, 1 m above CG (does NOT affect hydrostatics)
+aboveWaterMass = 20; % kg, above water mass, 1 m above CG (does NOT affect hydrostatics)
 aboveWaterMassLoc = [0 0 1]; %30*tan(mooringAngle)
 
 % NSIF

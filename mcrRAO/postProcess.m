@@ -2,7 +2,7 @@
 % close all
 % clc
 % 
-load('mcrResPCT.mat');
+load('mcrResRAO_3DOF_cb_corrected.mat');
 % 
 % load('obsData/processedDataPS')
 
@@ -37,17 +37,17 @@ if length(mcr.cases)==4
 
 else
     figure()
-    plot(mcr.cases(:,2),mcr.posAmpXY(:,[1]),'-.k')
+    plot(mcr.cases(:,2),mcr.posRMSXY(:,[1]),'-.k')
     hold on
-    plot(mcr.cases(:,2),mcr.posAmpXY(:,[3]),'--k')
-    plot(mcr.cases(:,2),mcr.posAmpXY(:,[5]),'-k')
+    plot(mcr.cases(:,2),mcr.posRMSXY(:,[3]),'--k')
+    plot(mcr.cases(:,2),mcr.posRMSXY(:,[5]),'-k')
     ylabel('Response (m or rad)')
     xlabel('Period (s)')
     legend({'Surge','Heave','Pitch'})
 
     figure()
-    plot(mcr.cases(:,2),mcr.posAmpXY(:,[5])*180/pi,'-k')
-    ylabel(strcat('Pitch Response (',char(176),')'))
+    plot(mcr.cases(:,2),mcr.posRMSXY(:,[5])*180/pi,'-k')
+    ylabel(strcat('Pitch Response RMS (',char(176),')'))
     xlabel('Period (s)')
     xlim([2, 10])
     
@@ -56,17 +56,17 @@ else
     % print(gcf, strcat('../paperFigs/RAO.pdf'), '-dpdf', '-fillpage','-r1000','-vector')
 
     figure()
-    plot(1./mcr.cases(:,2),mcr.excForceAmpXY(:,[1])./(mcr.velAmpXY(:,[1])*180/pi),'-.k')
+    plot(1./mcr.cases(:,2),mcr.excForceRMSXY(:,[1])./(mcr.velRMSXY(:,[1])*180/pi),'-.k')
     hold on
-    plot(1./mcr.cases(:,2),mcr.excForceAmpXY(:,[3])./(mcr.velAmpXY(:,[3])*180/pi),'--k')
-    plot(1./mcr.cases(:,2),mcr.excForceAmpXY(:,[5])./(mcr.velAmpXY(:,[5])*180/pi),'-k')
+    plot(1./mcr.cases(:,2),mcr.excForceRMSXY(:,[3])./(mcr.velRMSXY(:,[3])*180/pi),'--k')
+    plot(1./mcr.cases(:,2),mcr.excForceRMSXY(:,[5])./(mcr.velRMSXY(:,[5])*180/pi),'-k')
     ylabel('Impedance (m/Ns)')
     xlabel('Period (s)')
     legend({'Surge','Heave','Pitch'})
 
 
     figure()
-    semilogx(1./mcr.cases(:,2),mcr.excForceAmpXY(:,[5])./(mcr.velAmpXY(:,[5])*180/pi),'-k')
+    semilogx(1./mcr.cases(:,2),mcr.excForceRMSXY(:,[5])./(mcr.velRMSXY(:,[5])*180/pi),'-k')
     ylabel(strcat('Pitch Impedance Magnitude (Nms/',char(176),')'))
     xlabel('Frequency (Hz)')
     xlim([.1, .5])

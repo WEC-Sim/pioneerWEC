@@ -61,6 +61,7 @@ mcr.accAmpPS(imcr,:) = range(output.bodies(1).accelerationPS(startInd:end,:))/2;
 mcr.forceAmpPS(imcr,:) = range(output.bodies(1).forceTotalPS(startInd:end,:))/2;
 mcr.excForceAmpPS(imcr,:) = range(output.bodies(1).forceExcitationPS(startInd:end,:))/2;
 
+save(['outputSS',num2str(imcr),'.mat'],'output')
 
 if imcr == length(mcr.cases)
     

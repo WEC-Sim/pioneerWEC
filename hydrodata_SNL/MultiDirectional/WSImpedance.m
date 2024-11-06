@@ -18,6 +18,7 @@ dispVol = bodyTest.properties.volume; % m^3, displaced volume
 rho = 1000; % fluid density kg/m^3
 g = 9.81; % gravity (m/s^2)
 m = 3747; % buoy mass in kg
+I = 7484; % correct for pitch inertia
 
 % this gets to the "mesh only" contribution to Khs. This shouldn't change
 % in the original vs corrected values
@@ -43,9 +44,9 @@ Kmat = Kmat .* rho .* g;
 Kmat(4,4)=KhsCorr; Kmat(5,5)=KhsCorr;
 Kmat = repmat(Kmat,[1,1,length(w)]);
 
-m = 7484; % correct for pitch inertia
 
-Z = 1i .* wMat .* (m + Amat) + Bmat + Kmat./(1i.*wMat);
+
+Z = 1i .* wMat .* (I + Amat) + Bmat + Kmat./(1i.*wMat);
 
 %% plot
 
@@ -94,9 +95,37 @@ for k=1:4
     end
 end
 
-    
+%%
 
+figure()
+% subplot(4,1,1)
+% plot(squeeze(w),squeeze(real(Z(5,5,:))),'b','LineWidth',1.2)
+% grid on;
+% 
+% subplot(4,1,2)
+% plot(squeeze(w),squeeze(imag(Z(5,5,:))),'b','LineWidth',1.2)
+% grid on;
 
+subplot(2,1,1)
+semilogy(squeeze(w)/(2*pi),squeeze(abs(Z(5,5,:))),'LineWidth',1.2)
+grid on;
+xlim([min(squeeze(w)/(2*pi)),max(squeeze(w)/(2*pi))])
+ylabel('|Z|')
 
+subplot(2,1,2)
+plot(squeeze(w)/(2*pi),squeeze(angle(Z(5,5,:))),'LineWidth',1.2)
+grid on;
+xlim([min(squeeze(w)/(2*pi)),max(squeeze(w)/(2*pi))])
+xlabel('\omega (Hz)')
+ylabel('angle(Z)')
 
+% find natural frequency
+natFreq = interp1(squeeze(angle(Z(5,5,:))),squeeze(w)/(2*pi),0);
+natPeriod = 1/natFreq;
 
+xline(natFreq,'--','LineWidth',1.2);
+text(0.35, 0.05, ['Natural Frequency = ',num2str(natFreq,'%3.3f'),' s']);
+
+% set(gcf, 'PaperPosition', [0 0 6 4])
+% set(gcf, 'PaperSize', [6 4])
+% print(gcf, strcat('../../paperFigs/BEMImpedance.pdf'), '-dpdf', '-fillpage','-r1000','-vector')

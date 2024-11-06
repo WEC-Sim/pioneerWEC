@@ -16,8 +16,8 @@ heaveVec = str2num(fgets(fileID));
 pitchVec = str2num(fgets(fileID));
 fclose(fileID);
 
-waveFiles = string({'obsData/spectrumFile197.mat' 'obsData/spectrumFile422.mat' 'obsData/spectrumFile141.mat' 'obsData/spectrumFile332.mat'});
-excFiles = ["obsData/excitationForceWave1.mat", "obsData/excitationForceWave2.mat", "obsData/excitationForceWave3.mat", "obsData/excitationForceWave4.mat"];
+waveFiles = string({'../../obsData/spectrumFile197.mat' '../../obsData/spectrumFile422.mat' '../../obsData/spectrumFile141.mat' '../../obsData/spectrumFile332.mat'});
+excFiles = ["../../obsData/excitationForceWave1.mat", "../../obsData/excitationForceWave2.mat", "../../obsData/excitationForceWave3.mat", "../../obsData/excitationForceWave4.mat"];
 waveDirs = [252.0421   56.5412  285.4639   97.5443];
 
 for ii = 1:length(waveNum)
@@ -52,9 +52,11 @@ for ii = 1:length(waveDirs)
 	load(excFiles(ii)); % load in data from excitation file
 	waveDir = waveDirs(ii);
 	aboveWaterMass = aboveWaterMasses(ii);
-	cdSurge = cdSurges(ii);
-	cdHeave = cdHeaves(ii);
-	cdPitch = cdPitches(ii);
+	body(1).quadDrag.cd(1) = cdSurges(ii);
+    body(1).quadDrag.cd(2) = cdSurges(ii);
+	body(1).quadDrag.cd(3) = cdHeaves(ii);
+	body(1).quadDrag.cd(4) = cdPitches(ii);
+    body(1).quadDrag.cd(5) = cdPitches(ii);
 	caseFileVec(ii) = "caseFile"+num2str(ii)+".mat";
 	save(['caseFile',num2str(ii),'.mat'],'fExcTS', 'waveDir','aboveWaterMass','cdSurge','cdHeave','cdPitch')
 end

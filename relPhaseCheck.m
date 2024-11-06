@@ -17,7 +17,10 @@ function [freq,Cxy,Pxy,angP] = relPhaseCheck(X,Y,nWin,nOver,Fs,thresh,makeFigs)
 % angP: phase lag angle (y against x) at frequencies above threshold (rad)
 
 %% magnitude squared coherence
-[Cxy,freq]=mscohere(X,Y,hamming(nWin),nOver,[],Fs)
+X = detrend(X,'constant');
+Y = detrend(Y,'constant');
+
+[Cxy,freq]=mscohere(X,Y,hamming(nWin),nOver,[],Fs);
 
 if makeFigs ==1;
     figure; clf;
@@ -32,7 +35,7 @@ end
 
 % parse by threshold
 PxyParsed = Pxy;
-PxyParsed(Cxy < thresh) = 0;
+PxyParsed(Cxy < thresh) = NaN;
 
 % calculate phase lag angle 
 angP = angle(PxyParsed);
@@ -49,6 +52,7 @@ if makeFigs ==1;
     figure; clf;
     plot(freq,angP,'b')
     hold on; grid on
+    plot(freq,angle(Pxy),'--r');
     xlabel('Frequency (Hz)')
     ylabel('Phase Lag (rad)')
     legend('Full','Parsed')

@@ -30,7 +30,7 @@ simu.mcrMatFile = 'mcrCases.mat';
 % waves.current.speed = .05;
 
 waveNum = 1;
-waveFiles = {'obsData/spectrumFile197.mat' 'obsData/spectrumFile422.mat' 'obsData/spectrumFile141.mat' 'obsData/spectrumFile332.mat'};
+waveFiles = {'../../obsData/spectrumFile197.mat' '../../obsData/spectrumFile422.mat' '../../obsData/spectrumFile141.mat' '../../obsData/spectrumFile332.mat'};
 waveDirs = [252.0421   56.5412  285.4639   97.5443];
 
 waves = waveClass('spectrumImport');      % Create the Wave Variable and Specify Type
@@ -39,7 +39,7 @@ waves.direction = waveDirs(waveNum); % 240.9309   48.4308  107.6652  108.3043
 waves.waterDepth = 30;
 waves.phaseSeed = 1;                      % Phase is seeded so eta is the same
 
-excFiles = {'obsData/excitationForceWave1.mat' 'obsData/excitationForceWave2.mat' 'obsData/excitationForceWave3.mat' 'obsData/excitationForceWave4.mat'};
+excFiles = {'../../obsData/excitationForceWave1.mat' '../../obsData/excitationForceWave2.mat' '../../obsData/excitationForceWave3.mat' '../../obsData/excitationForceWave4.mat'};
 load(string(excFiles(waveNum)));
 
 % Regular waves
@@ -55,7 +55,7 @@ waves.current.direction = 270;
 
 %% Body Data
 % Float
-body(1)              = bodyClass('./hydrodata_SNL/wamitIRR1L1PCGCubitv2/wec_and_nsif_clean.h5');  
+body(1)              = bodyClass('../../hydrodata_SNL/wamitIRR1L1PCGCubitv2/wec_and_nsif_clean.h5');  
 % this h5 file is cleaned BEM EXCEPT:
 % Body 1 CB adjusted based upon buoy diagram because the box modeled in BEM as
 % solid geometry

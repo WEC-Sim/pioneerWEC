@@ -2,7 +2,7 @@
 % close all
 % clc
 % 
-load('mcrRes4SS.mat');
+load('mcrRes4SS_fixedKhs.mat');
 % 
 load('obsData/processedDataPS')
 
@@ -11,7 +11,7 @@ weights = [.48 .22 .21 .09];
 if length(mcr.cases)==4
     for ii = 1:length(mcr.cases)
         velRMSObs(ii,:) = [processedData{ii}.rmsTransPS, processedData{ii}.rmsRotPS*180/pi];
-        velRMSWS(ii,:) = [mcr.velRMSPS(ii,1:3), mcr.velRMSPS(ii,4:6)*180/pi]
+        velRMSWS(ii,:) = [mcr.velRMSPS(ii,1:3), mcr.velRMSPS(ii,4:6)*180/pi];
         velRMSDiff(ii,1:3) = processedData{ii}.rmsTransPS - mcr.velRMSPS(ii,1:3);
         velRMSDiff(ii,4:6) = (processedData{ii}.rmsRotPS - mcr.velRMSPS(ii,4:6))*180/pi;
         velRMSDiffPercent(ii,1:3) = (processedData{ii}.rmsTransPS - mcr.velRMSPS(ii,1:3))./processedData{ii}.rmsTransPS*100;

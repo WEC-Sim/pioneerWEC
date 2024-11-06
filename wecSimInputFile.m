@@ -5,14 +5,14 @@ simu.simMechanicsFile = 'pioneerSNL.slx';
 simu.mode      = 'normal';                   % Specify Simulation Mode ('normal','accelerator','rapid-accelerator')
 simu.explorer  = 'on';                       % Turn SimMechanics Explorer (on/off)
 simu.startTime = 0;                          % Simulation Start Time [s]
-simu.endTime   = 1200;                      % Simulation End Time [s]
+simu.endTime   = 1300;                      % Simulation End Time [s]
 simu.rampTime  = 0.05*simu.endTime;           % Wave Ramp Time [s]
 %%% Note from Dom: ode23t or other mod stiff tends to work better with the inverse trig
 %%% functions in custom mooring and the cable approximation. 
 simu.solver    = 'ode23t';                    % simu.solver = 'ode4' for fixed step & simu.solver = 'ode45' for variable step 
 simu.dt        = 0.05; 					  	 % Simulation time-step [s]
 simu.cicEndTime = 30;
-% simu.mcrMatFile = 'mcrCases.mat';
+simu.mcrMatFile = 'mcrCases.mat';
 
 %% Wave Information 
 
@@ -47,12 +47,12 @@ waves.phaseSeed = 1;                      % Phase is seeded so eta is the same
 % % force manually to include the frequency dependents wave direction and
 % % load it in here
 excFiles = {'obsData/excitationForceWave1.mat' 'obsData/excitationForceWave2.mat' 'obsData/excitationForceWave3.mat' 'obsData/excitationForceWave4.mat'};
-load(string(excFiles(waveNum)));
+load(string(excFiles(1)));
 
 % Regular waves - run MCR for RAO
 % waves = waveClass('regularCIC');           % Initialize Wave Class and Specify Type
 % waves.height = 1;                       % Significant Wave Height [m]
-% waves.period = 2:2:10;                         % Peak Period [s]
+% waves.period = 8;                         % Peak Period [s]
 % waves.waterDepth = 30;
 % waves.direction = 0;
 
@@ -89,14 +89,14 @@ body(1).geometryFile = './geometry/pnr_with_box.stl';
 body(1).mass         = 3747; %'equilibrium';   +boxMass            
 body(1).inertia      = [7484 7484 1025*7.6135596];  % provided inertia in roll/pitch...unsure about yaw inertia +boxInertia
 body(1).quadDrag.area = [2.5553 2.5553 8.5634 8.5634 8.5634 1.0768];
-cdSurge = 6;
+cdSurge = 4;
 cdHeave = 0.5;
-cdPitch = 1.5;
+cdPitch = 1;
 body(1).quadDrag.cd = [cdSurge, cdSurge, cdHeave, cdPitch, cdPitch, 0.5];
 body(1).meanDrift = 2;
 % body(1).nonlinearHydro = 2;
 
-aboveWaterMass = 0; % kg, above water mass, 1 m above CG (does NOT affect hydrostatics)
+aboveWaterMass = 20; % kg, above water mass, 1 m above CG (does NOT affect hydrostatics)
 aboveWaterMassLoc = [0 0 1]; %30*tan(mooringAngle)
 
 % NSIF
