@@ -2,7 +2,7 @@
 % close all
 % clc
 % 
-load('mcrResRAO_3DOF_cb_corrected.mat');
+load('mcrResRAO_newNew.mat');
 % 
 % load('obsData/processedDataPS')
 
@@ -46,8 +46,8 @@ else
     legend({'Surge','Heave','Pitch'})
 
     figure()
-    plot(mcr.cases(:,2),mcr.posRMSXY(:,[5])*180/pi,'-k')
-    ylabel(strcat('Pitch Response RMS (',char(176),')'))
+    plot(mcr.cases(:,2),mcr.posRMSXY(:,[5])*180/pi/waves.height,'-k')
+    ylabel(strcat('Pitch Response RMS (',char(176),'/m)'))
     xlabel('Period (s)')
     xlim([2, 10])
     

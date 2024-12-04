@@ -6,25 +6,25 @@ Version: 6.0
 Initializing the Simulation Class...
 	Case Dir: C:\Users\jtgrasb\Documents\GitHub\pioneerSNL\mcrRAO 
 wecSimMCR Case 33
-Elapsed time is 1.556056 seconds.
+Elapsed time is 3.244949 seconds.
 
 WEC-Sim Pre-processing ...   
 [Warning: Because water depth is specified in the wecSimInputFile, the water depth from the BEM data is ignored] 
-[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('waveClass/setWaterDepth', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\objects\waveClass.m', 572)" style="font-weight:bold">waveClass/setWaterDepth</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\objects\waveClass.m',572,0)">line 572</a>)
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('waveClass/setWaterDepth', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\objects\waveClass.m', 571)" style="font-weight:bold">waveClass/setWaterDepth</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\objects\waveClass.m',571,0)">line 571</a>)
 In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('waveClass/setup', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\objects\waveClass.m', 253)" style="font-weight:bold">waveClass/setup</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\objects\waveClass.m',253,0)">line 253</a>)
-In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('initializeWecSim', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\functions\initializeWecSim.m', 257)" style="font-weight:bold">initializeWecSim</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\functions\initializeWecSim.m',257,0)">line 257</a>)
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('initializeWecSim', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\functions\initializeWecSim.m', 278)" style="font-weight:bold">initializeWecSim</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\functions\initializeWecSim.m',278,0)">line 278</a>)
 In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('run', 'C:\Program Files\MATLAB\R2023b\toolbox\matlab\lang\run.m', 99)" style="font-weight:bold">run</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2023b\toolbox\matlab\lang\run.m',99,0)">line 99</a>)
 In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('wecSim', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSim.m', 43)" style="font-weight:bold">wecSim</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSim.m',43,0)">line 43</a>)
 In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('wecSimMCR', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSimMCR.m', 92)" style="font-weight:bold">wecSimMCR</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSimMCR.m',92,0)">line 92</a>)] 
-Elapsed time is 0.481817 seconds.
+Elapsed time is 0.551866 seconds.
 
 WEC-Sim Simulation Settings:
 	Start Time                     (sec) = 0
-	End Time                       (sec) = 1200
+	End Time                       (sec) = 500
 	Time Step Size                 (sec) = 0.05
-	Ramp Function Time             (sec) = 60
+	Ramp Function Time             (sec) = 25
 	Convolution Integral Interval  (sec) = 30
-	 Number of Time Steps     = 24000 
+	 Number of Time Steps     = 10000 
 
 Wave Environment: 
 	Wave Type                            = Regular Waves (Convolution Integral Calculation)
@@ -59,8 +59,8 @@ List of Constraint(s): Number of Constraints = 1
 
 
 Simulating the WEC device defined in the SimMechanics model C:\Users\jtgrasb\Documents\GitHub\pioneerSNL\mcrRAO\pioneerSNL.slx...   
-Elapsed time is 0.751104 seconds.
-Elapsed time is 73.131488 seconds.
+Elapsed time is 1.535526 seconds.
+Elapsed time is 73.706298 seconds.
 
 Post-processing and saving...   
-Elapsed time is 0.076534 seconds.
+Elapsed time is 0.995876 seconds.

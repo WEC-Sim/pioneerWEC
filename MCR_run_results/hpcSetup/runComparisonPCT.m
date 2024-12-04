@@ -1,9 +1,9 @@
 function runComparisonPCT(parCount,numPar)
 
-tic
+tic 
 
 % Define WEC-Sim source and add to MATLAB path
-wecSimSource = fullfile('../WEC-Sim/source');
+wecSimSource = fullfile('../WEC-SimPNR');
 addpath(genpath(wecSimSource));
 clear wecSimSource
 
@@ -16,8 +16,8 @@ heaveVec = str2num(fgets(fileID));
 pitchVec = str2num(fgets(fileID));
 fclose(fileID);
 
-waveFiles = string({'../../obsData/spectrumFile197.mat' '../../obsData/spectrumFile422.mat' '../../obsData/spectrumFile141.mat' '../../obsData/spectrumFile332.mat'});
-excFiles = ["../../obsData/excitationForceWave1.mat", "../../obsData/excitationForceWave2.mat", "../../obsData/excitationForceWave3.mat", "../../obsData/excitationForceWave4.mat"];
+waveFiles = ["obsData/spectrumFile197.mat", "obsData/spectrumFile422.mat", "obsData/spectrumFile141.mat", "obsData/spectrumFile332.mat"];
+excFiles = ["obsData/excitationForceWave1.mat", "obsData/excitationForceWave2.mat", "obsData/excitationForceWave3.mat", "obsData/excitationForceWave4.mat"];
 waveDirs = [252.0421   56.5412  285.4639   97.5443];
 
 for ii = 1:length(waveNum)
@@ -32,6 +32,7 @@ breakFlag = 0;
 if (length(waveNum) + numPar) == numPar*parCount
 	breakFlag = 1;
 elseif length(waveNum) < numPar*parCount
+  spectrumFiles = fileVec((1+numPar*(parCount-1)):end)';
 	excFiles = excFileVec((1+numPar*(parCount-1)):end)';
 	waveDirs = dirVec((1+numPar*(parCount-1)):end)';
 	aboveWaterMasses = massVec((1+numPar*(parCount-1)):end)';
@@ -39,6 +40,7 @@ elseif length(waveNum) < numPar*parCount
 	cdHeaves = heaveVec((1+numPar*(parCount-1)):end)';
 	cdPitches = pitchVec((1+numPar*(parCount-1)):end)';
 else
+  spectrumFiles = fileVec((1+numPar*(parCount-1)):numPar*parCount)';
 	excFiles = excFileVec((1+numPar*(parCount-1)):numPar*parCount)';
 	waveDirs = dirVec((1+numPar*(parCount-1)):numPar*parCount)';
 	aboveWaterMasses = massVec((1+numPar*(parCount-1)):numPar*parCount)';
@@ -50,15 +52,14 @@ end
 
 for ii = 1:length(waveDirs)
 	load(excFiles(ii)); % load in data from excitation file
+  spectrumFile = spectrumFiles(ii);
 	waveDir = waveDirs(ii);
 	aboveWaterMass = aboveWaterMasses(ii);
-	body(1).quadDrag.cd(1) = cdSurges(ii);
-    body(1).quadDrag.cd(2) = cdSurges(ii);
-	body(1).quadDrag.cd(3) = cdHeaves(ii);
-	body(1).quadDrag.cd(4) = cdPitches(ii);
-    body(1).quadDrag.cd(5) = cdPitches(ii);
+	cdSurge = cdSurges(ii);
+	cdHeave = cdHeaves(ii);
+	cdPitch = cdPitches(ii);
 	caseFileVec(ii) = "caseFile"+num2str(ii)+".mat";
-	save(['caseFile',num2str(ii),'.mat'],'fExcTS', 'waveDir','aboveWaterMass','cdSurge','cdHeave','cdPitch')
+	save(['caseFile',num2str(ii),'.mat'],'fExcTS','spectrumFile','waveDir','aboveWaterMass','cdSurge','cdHeave','cdPitch')
 end
 
 mcr = struct();
@@ -72,6 +73,8 @@ if breakFlag ~=1
 	save mcrCases mcr
 
 	wecSimPCT
+ 
+  % close_system('pioneerSNL',0)
     
 	postProcessPCT
 

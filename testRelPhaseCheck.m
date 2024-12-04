@@ -25,7 +25,7 @@ qSS = 4;
 loadStr = ['outputSS' num2str(qSS) '.mat'];
 load(loadStr);
 
-processedData{1,qSS}.primaryAxis = processedData{1,qSS}.primaryAxis + 90; % subtract 90 degrees from primary axis to move preferred axis rotation from 4th column to 5th column
+processedData{1,qSS}.primaryAxis = processedData{1,qSS}.primaryAxis + 90; % add 90 degrees to primary axis to move preferred axis rotation from 4th column to 5th column
 
 % grab integer number of windows
 processedData{1,qSS}.NEDVelPS = processedData{1,qSS}.NEDVel*rotz(processedData{1,qSS}.primaryAxis);

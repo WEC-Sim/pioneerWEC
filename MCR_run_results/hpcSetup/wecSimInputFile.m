@@ -29,8 +29,9 @@ simu.mcrMatFile = 'mcrCases.mat';
 % waves.current.option = 1;
 % waves.current.speed = .05;
 
+addpath('obsData')
 waveNum = 1;
-waveFiles = {'../../obsData/spectrumFile197.mat' '../../obsData/spectrumFile422.mat' '../../obsData/spectrumFile141.mat' '../../obsData/spectrumFile332.mat'};
+waveFiles = {'obsData/spectrumFile197.mat' 'obsData/spectrumFile422.mat' 'obsData/spectrumFile141.mat' 'obsData/spectrumFile332.mat'};
 waveDirs = [252.0421   56.5412  285.4639   97.5443];
 
 waves = waveClass('spectrumImport');      % Create the Wave Variable and Specify Type
@@ -39,13 +40,13 @@ waves.direction = waveDirs(waveNum); % 240.9309   48.4308  107.6652  108.3043
 waves.waterDepth = 30;
 waves.phaseSeed = 1;                      % Phase is seeded so eta is the same
 
-excFiles = {'../../obsData/excitationForceWave1.mat' '../../obsData/excitationForceWave2.mat' '../../obsData/excitationForceWave3.mat' '../../obsData/excitationForceWave4.mat'};
+excFiles = {'obsData/excitationForceWave1.mat' 'obsData/excitationForceWave2.mat' 'obsData/excitationForceWave3.mat' 'obsData/excitationForceWave4.mat'};
 load(string(excFiles(waveNum)));
 
 % Regular waves
 % waves = waveClass('regularCIC');           % Initialize Wave Class and Specify Type
 % waves.height = 1;                       % Significant Wave Height [m]
-% waves.period = 2:.25:10;                         % Peak Period [s]
+% waves.period = 8; %:.25:10;                         % Peak Period [s]
 % waves.waterDepth = 30;
 % waves.direction = 0;
 
@@ -55,7 +56,7 @@ waves.current.direction = 270;
 
 %% Body Data
 % Float
-body(1)              = bodyClass('../../hydrodata_SNL/wamitIRR1L1PCGCubitv2/wec_and_nsif_clean.h5');  
+body(1)              = bodyClass('./hydrodata_SNL/wamitIRR1L1PCGCubitv2/wec_and_nsif_clean_cb_corrected.h5');  
 % this h5 file is cleaned BEM EXCEPT:
 % Body 1 CB adjusted based upon buoy diagram because the box modeled in BEM as
 % solid geometry
@@ -71,13 +72,13 @@ boxInertia = boxMass*cgToBox;
 body(1).mass         = 3747; %'equilibrium';   +boxMass            
 body(1).inertia      = [7484 7484 1025*7.6135596];  % provided inertia in roll/pitch...unsure about yaw inertia +boxInertia
 body(1).quadDrag.area = [2.5553 2.5553 8.5634 8.5634 8.5634 1.0768];
-cdSurge = 8;
-cdHeave = 2;
-cdPitch = 6;
+cdSurge = 4;
+cdHeave = 0.5;
+cdPitch = 1;
 body(1).quadDrag.cd = [cdSurge, cdSurge, cdHeave, cdPitch, cdPitch, 0.5];
 body(1).meanDrift = 2;
 
-aboveWaterMass = -20; % kg, above water mass, 1 m above CG (does NOT affect hydrostatics)
+aboveWaterMass = 20; % kg, above water mass, 1 m above CG (does NOT affect hydrostatics)
 aboveWaterMassLoc = [0 0 1]; %30*tan(mooringAngle)
 
 % NSIF
@@ -179,5 +180,21 @@ mooring(1)  = mooringClass('mooring');
 mooring(1).location = [0.0 0.0 -9.500]; % assumed attached to approx bottom of NSIF
 
 % mooring 
-L0 = 30-9.5; % equilibrium length: make sure this is mooring.location + waves.waterDepth
-polyNom = fliplr([0, 9.2e3, -15e3, 0, 15e3]); % polynomial definition
+L0 = 15+19.8; % equilibrium length: make sure this is mooring.location + waves.waterDepth
+polyNom = 1.0e+04*[1.9488   -0.0390   -1.3588    0.8094   -0.0004]; % polynomial definition
+
+% initial position (as a result of mooring scope) - this is overridden in initializeWecSim when the mcr is loaded in
+surgeDisp = sqrt(L0^2 - 20.5^2);
+xLoc = surgeDisp*cosd(waveDirs(waveNum));
+yLoc = surgeDisp*sind(waveDirs(waveNum));
+
+% set initial displacement for bodies, ptos, and moorings
+body(1).initial.displacement = [xLoc, yLoc, 0];
+body(2).initial.displacement = [xLoc, yLoc, 0];
+body(3).initial.displacement = [xLoc, yLoc, 0];
+body(4).initial.displacement = [xLoc, yLoc, 0];
+pto(1).initial.displacement = [xLoc, yLoc, 0];
+pto(2).initial.displacement = [xLoc, yLoc, 0];
+pto(3).initial.displacement = [xLoc, yLoc, 0];
+mooring(1).initial.displacement = [xLoc, yLoc, 0];
+aboveWaterMassLoc = [xLoc yLoc 1];

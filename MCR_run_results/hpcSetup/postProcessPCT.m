@@ -29,12 +29,15 @@ for jj = 1:length(files)
 
         mcrNew.waveHeight(fileCount) = waves.height;
         mcrNew.wavePeriod(fileCount) = waves.period;
-	mcrNew.waveDirection(fileCount) = waves.direction;
+	      mcrNew.waveDirection(fileCount) = waves.direction;
+        mcrNew.waveDirection_MCR(fileCount) = waveDir;
         mcrNew.aboveWaterMass(fileCount) = aboveWaterMass;
         mcrNew.cdSurge(fileCount) = body(1).quadDrag.cd(1);
         mcrNew.cdHeave(fileCount) = body(1).quadDrag.cd(3);
         mcrNew.cdPitch(fileCount) = body(1).quadDrag.cd(5);
-
+        mcrNew.xLoc(fileCount) = xLoc;
+        mcrNew.yLoc(fileCount) = yLoc;
+  
 	mcrNew.posRMS(fileCount,:) = rms(output.bodies(1).position(startInd:end,:));
         mcrNew.velRMS(fileCount,:) = rms(output.bodies(1).velocity(startInd:end,:));
 	mcrNew.accRMS(fileCount,:) = rms(output.bodies(1).acceleration(startInd:end,:));

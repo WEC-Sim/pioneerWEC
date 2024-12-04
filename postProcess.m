@@ -2,7 +2,7 @@
 % close all
 % clc
 % 
-load('mcrRes4SS_fixedKhs.mat');
+load('mcrRes4SS_newNewNew.mat');
 % 
 load('obsData/processedDataPS')
 
@@ -52,7 +52,7 @@ else
 
     % set(gcf, 'PaperPosition', [0 0 5 4])
     % set(gcf, 'PaperSize', [5 4])
-    % print(gcf, strcat('./paperFigs/RAO.pdf'), '-dpdf', '-fillpage','-r1000','-image')
+    % print(gcf, strcat('./paperFigs/RAO.pdf'), '-dpdf', '-fillpage','-r1000','-vector')
 
     figure()
     plot(mcr.cases(:,2),mcr.velAmpXY(:,[1])./mcr.excForceAmpXY(:,[1]),'-.k')
@@ -71,7 +71,7 @@ else
     
     % set(gcf, 'PaperPosition', [0 0 5 4])
     % set(gcf, 'PaperSize', [5 4])
-    % print(gcf, strcat('./paperFigs/Impedance.pdf'), '-dpdf', '-fillpage','-r1000','-image')
+    % print(gcf, strcat('./paperFigs/Impedance.pdf'), '-dpdf', '-fillpage','-r1000','-vector')
 
 end
 

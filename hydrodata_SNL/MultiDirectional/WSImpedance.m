@@ -116,7 +116,7 @@ subplot(2,1,2)
 plot(squeeze(w)/(2*pi),squeeze(angle(Z(5,5,:))),'LineWidth',1.2)
 grid on;
 xlim([min(squeeze(w)/(2*pi)),max(squeeze(w)/(2*pi))])
-xlabel('\omega (Hz)')
+xlabel('f (Hz)')
 ylabel('angle(Z)')
 
 % find natural frequency

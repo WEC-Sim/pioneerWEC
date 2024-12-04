@@ -47,29 +47,35 @@ waves.phaseSeed = 1;                      % Phase is seeded so eta is the same
 % % force manually to include the frequency dependents wave direction and
 % % load it in here
 excFiles = {'obsData/excitationForceWave1.mat' 'obsData/excitationForceWave2.mat' 'obsData/excitationForceWave3.mat' 'obsData/excitationForceWave4.mat'};
-load(string(excFiles(1)));
+load(string(excFiles(waveNum)));
 
 % Regular waves - run MCR for RAO
 % waves = waveClass('regularCIC');           % Initialize Wave Class and Specify Type
 % waves.height = 1;                       % Significant Wave Height [m]
 % waves.period = 8;                         % Peak Period [s]
-% waves.waterDepth = 30;
+% waves.waterDepth = 30
 % waves.direction = 0;
 
-% waves.current.option = 1;
-% waves.current.speed = .05;
-% waves.current.direction = 270;
+waves.current.option = 1;
+waves.current.speed = .05;
+waves.current.direction = 270;
 
 % %% Wave Visualization Markers
 % % Example with a square mesh of visualization markers
 % marker = 20;
-% distance = 5;
+% distance = 4;
 % [X,Y] = meshgrid(-marker:distance:marker,-marker:distance:marker);
 % waves.marker.location = [reshape(X,[],1),reshape(Y,[],1)]; % Marker Locations [X,Y]
 % clear('marker','distance','X','Y')
 % waves.marker.style = 1; % 1: Sphere, 2: Cube, 3: Frame.
 % waves.marker.size = 10; % Marker Size in Pixels
 % waves.marker.graphicColor = [1,0,0];
+
+%% initial position (as a result of mooring scope)
+L0 = 15+19.8;
+surgeDisp = sqrt(L0^2 - 20.5^2);
+xLoc = surgeDisp*cosd(waveDirs(waveNum));
+yLoc = surgeDisp*sind(waveDirs(waveNum));
 
 %% Body Data
 % Float
@@ -95,9 +101,10 @@ cdPitch = 1;
 body(1).quadDrag.cd = [cdSurge, cdSurge, cdHeave, cdPitch, cdPitch, 0.5];
 body(1).meanDrift = 2;
 % body(1).nonlinearHydro = 2;
+body(1).initial.displacement = [xLoc, yLoc, 0];
 
-aboveWaterMass = 20; % kg, above water mass, 1 m above CG (does NOT affect hydrostatics)
-aboveWaterMassLoc = [0 0 1]; %30*tan(mooringAngle)
+aboveWaterMass = -20; % kg, above water mass, 1 m above CG (does NOT affect hydrostatics)
+aboveWaterMassLoc = [xLoc yLoc 1]; %30*tan(mooringAngle)
 
 % NSIF
 body(2)              = bodyClass('');        
@@ -119,6 +126,7 @@ body(2).hydroStiffness(3:end,3:end) = [1.0990e-07, 2.4357e-04, -4.6197e-05, 0;
                                         2.4357e-04, -0.8268, -1.8562e-04, 0;
                                         -4.6197e-05, -1.8562e-04, -0.8270, 0;
                                         0, 0, 0, 0.9950];
+body(2).initial.displacement = [xLoc, yLoc, 0];
 
 % body(2).morisonElement.option = 1;  
 % body(2).morisonElement.cd = [0.5; 0.5; 0.5].';
@@ -145,6 +153,7 @@ body(3).centerGravity = [0,0,-2.686975];                               % the top
 body(3).centerBuoyancy = [0,0,-2.686975];
 body(3).inertia = [(1/12)*body(3).mass * (3*0.0127^2 + 2) (1/12)*body(3).mass * (3*0.0127^2 + 2) ...
     (1/2)*body(3).mass * 0.0127^2];
+body(3).initial.displacement = [xLoc, yLoc, 0];
 
 body(4) = bodyClass('');
 body(4).geometryFile = './geometry/sphere_out.stl';
@@ -159,6 +168,7 @@ body(4).centerGravity = [0,0,-5.562325];                               % the bot
 body(4).centerBuoyancy = [0,0,-5.562325];
 body(4).inertia = [(1/12)*body(4).mass * (3*0.0127^2 + 2) (1/12)*body(4).mass * (3*0.0127^2 + 2) ...
     (1/2)*body(4).mass * 0.0127^2];
+body(4).initial.displacement = [xLoc, yLoc, 0];
 
 %% PTO and Constraint Parameters
 % Floating (6DOF) Joint
@@ -180,23 +190,27 @@ pto(1) = ptoClass('pto1');
 pto(1).damping = jointDamping;
 pto(1).stiffness = jointStiffness;
 pto(1).location = [0 0 -1.2493]; % bottom of instrumentation cage based on engineering drawing
+pto(1).initial.displacement = [xLoc, yLoc, 0];
 
 pto(2) = ptoClass('pto2');
 pto(2).damping = jointDamping;
 pto(2).stiffness = jointStiffness;
 pto(2).location = [0 0 -4.12465]; % somewhere in the middle of the cable, between the two body elements above
+pto(2).initial.displacement = [xLoc, yLoc, 0];
 
 pto(3) = ptoClass('pto3');
 pto(3).damping = jointDamping;
 pto(3).stiffness = jointStiffness;
 pto(3).location = [0 0 -7]; % assumed attached to approx top of NSIF
+pto(3).initial.displacement = [xLoc, yLoc, 0];
 
 %%
 % pioneersim.moorK    = 2e2;
 % pioneersim.moorC    = 1e3;
 mooring(1)  = mooringClass('mooring');
 mooring(1).location = [0.0 0.0 -9.500]; % assumed attached to approx bottom of NSIF
+mooring(1).initial.displacement = [xLoc, yLoc, 0];
 
 % mooring 
-L0 = 30-9.5; % equilibrium length: make sure this is mooring.location + waves.waterDepth
-polyNom = fliplr([0, 9.2e3, -15e3, 0, 15e3]); % polynomial definition
+L0 = 15+19.8; % equilibrium length
+polyNom = 1.0e+04*[1.9488   -0.0390   -1.3588    0.8094   -0.0004]; % polynomial definition
