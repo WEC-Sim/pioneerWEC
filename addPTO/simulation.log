@@ -1,0 +1,64 @@
+
+WEC-Sim Input From Standard wecSimInputFile.m Of Case Directory... 
+WEC-Sim: An open-source code for simulating wave energy converters
+Version: 6.1.2
+
+Initializing the Simulation Class...
+	Case Dir: C:\Users\jtgrasb\Documents\GitHub\pioneerSNL\addPTO 
+Elapsed time is 0.656963 seconds.
+
+WEC-Sim Pre-processing ...   
+[Warning: Because water depth is specified in the wecSimInputFile, the water depth from the BEM data is ignored] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('waveClass/setWaterDepth', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\objects\waveClass.m', 641)" style="font-weight:bold">waveClass/setWaterDepth</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\objects\waveClass.m',641,0)">line 641</a>)
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('waveClass/setup', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\objects\waveClass.m', 273)" style="font-weight:bold">waveClass/setup</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\objects\waveClass.m',273,0)">line 273</a>)
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('initializeWecSim', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\functions\initializeWecSim.m', 264)" style="font-weight:bold">initializeWecSim</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\functions\initializeWecSim.m',264,0)">line 264</a>)
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('run', 'C:\Program Files\MATLAB\R2023b\toolbox\matlab\lang\run.m', 99)" style="font-weight:bold">run</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2023b\toolbox\matlab\lang\run.m',99,0)">line 99</a>)
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('wecSim', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSim.m', 40)" style="font-weight:bold">wecSim</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSim.m',40,0)">line 40</a>)] 
+Elapsed time is 0.333514 seconds.
+
+WEC-Sim Simulation Settings:
+	Start Time                     (sec) = 0
+	End Time                       (sec) = 100
+	Time Step Size                 (sec) = 0.05
+	Ramp Function Time             (sec) = 5
+	 Number of Time Steps     = 2000 
+
+Wave Environment: 
+	Wave Type                            = Regular Waves (Constant Hydrodynamic Coefficients)
+	Wave Height, height (m)                   = 1
+	Wave Period, period (sec)                 = 10
+
+List of Body:
+ Number of Hydro Bodies = 1 
+
+	***** Body Number 1, Name: pioneer_sym *****
+	Body CG                          (m) = [0,0,0.298]
+	Body Mass                       (kg) = 3747 
+	Body Moments of Inertia       (kgm2) = [7484,7484,7803.9]
+	Body Products of Inertia      (kgm2) = [0,0,0]
+
+List of PTO(s): Number of PTOs = 3 
+
+	***** PTO Name: pto1 *****
+	PTO Stiffness           (N/m;Nm/rad) = 1
+	PTO Damping           (Ns/m;Nsm/rad) = 10
+
+	***** PTO Name: pto2 *****
+	PTO Stiffness           (N/m;Nm/rad) = 1
+	PTO Damping           (Ns/m;Nsm/rad) = 10
+
+	***** PTO Name: pto3 *****
+	PTO Stiffness           (N/m;Nm/rad) = 1
+	PTO Damping           (Ns/m;Nsm/rad) = 10
+
+List of Constraint(s): Number of Constraints = 1 
+
+	***** Constraint Name: Constraint1 *****
+
+
+Simulating the WEC device defined in the SimMechanics model C:\Users\jtgrasb\Documents\GitHub\pioneerSNL\addPTO\pioneerSNL.slx...   
+Elapsed time is 4.389633 seconds.
+Elapsed time is 18.054408 seconds.
+
+Post-processing and saving...   
+Elapsed time is 1.490145 seconds.
