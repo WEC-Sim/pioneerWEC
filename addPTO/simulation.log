@@ -5,7 +5,7 @@ Version: 6.1.2
 
 Initializing the Simulation Class...
 	Case Dir: C:\Users\jtgrasb\Documents\GitHub\pioneerSNL\addPTO 
-Elapsed time is 0.656963 seconds.
+Elapsed time is 1.538957 seconds.
 
 WEC-Sim Pre-processing ...   
 [Warning: Because water depth is specified in the wecSimInputFile, the water depth from the BEM data is ignored] 
@@ -14,7 +14,7 @@ In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('wave
 In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('initializeWecSim', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\functions\initializeWecSim.m', 264)" style="font-weight:bold">initializeWecSim</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\functions\initializeWecSim.m',264,0)">line 264</a>)
 In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('run', 'C:\Program Files\MATLAB\R2023b\toolbox\matlab\lang\run.m', 99)" style="font-weight:bold">run</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2023b\toolbox\matlab\lang\run.m',99,0)">line 99</a>)
 In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('wecSim', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSim.m', 40)" style="font-weight:bold">wecSim</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSim.m',40,0)">line 40</a>)] 
-Elapsed time is 0.333514 seconds.
+Elapsed time is 0.230501 seconds.
 
 WEC-Sim Simulation Settings:
 	Start Time                     (sec) = 0
@@ -57,8 +57,13 @@ List of Constraint(s): Number of Constraints = 1
 
 
 Simulating the WEC device defined in the SimMechanics model C:\Users\jtgrasb\Documents\GitHub\pioneerSNL\addPTO\pioneerSNL.slx...   
-Elapsed time is 4.389633 seconds.
-Elapsed time is 18.054408 seconds.
-
-Post-processing and saving...   
-Elapsed time is 1.490145 seconds.
+Elapsed time is 3.775907 seconds.
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('wecSim')" style="font-weight:bold">wecSim</a>
+['pioneerSNL/Global Reference Frame/Solver Configuration']: Error evaluating equations at time 0.125. Stopping
+simulation.  There may be a singularity in the solution.  If not, try reducing the step size (either by reducing the
+fixed step size or by tightening the error tolerances)
+Caused by:
+    Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('wecSim')" style="font-weight:bold">wecSim</a>
+    ['pioneerSNL/Spherical PTO1/Spherical Joint']: 'pioneerSNL/Spherical PTO1/Spherical Joint' has a degenerate mass
+    distribution on its follower side.
+} 

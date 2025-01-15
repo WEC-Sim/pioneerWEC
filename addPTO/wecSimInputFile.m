@@ -198,6 +198,8 @@ polyNom = 1.0e+04*[1.9488   -0.0390   -1.3588    0.8094   -0.0004]; % polynomial
 
 %% Inverted pendulum PTO parameters
 
+ptoDamping = 1e3; % filler value
+
 % Pendulum
 massPendulum = 244; % kg
 pendulumCG = 0.1248; % m from pendulum shaft
