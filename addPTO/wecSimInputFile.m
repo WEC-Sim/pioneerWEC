@@ -238,6 +238,8 @@ contTorque = 3.1806; % Nm
 %maxPeakCurrent = ; %N/A
 maxSpeed = 3200; % rpm
 motorFriction = 0.6125; % Nm
+motorVoltage = 60; % V
+motorInertia = 1530/(1000)/(100^2); % kgm^2 from specs online
 
 maxVoltage = 32; % V
 

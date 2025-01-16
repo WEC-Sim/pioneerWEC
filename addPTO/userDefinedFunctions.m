@@ -30,3 +30,12 @@ output.plotForces(1,5);
 % output.saveViz(simu,body,waves,...
 %     'timesPerFrame',5,'axisLimits',[-150 150 -150 150 -50 20],...
 %     'startEndTime',[100 125]);
+
+% plot pendulum position and spring torque
+figure()
+plot(RelativeAngle.time,RelativeAngle.signals.values)
+hold on
+yyaxis right
+plot(springAndMotorTorque,'--')
+legend('Angle','Torque')
+
