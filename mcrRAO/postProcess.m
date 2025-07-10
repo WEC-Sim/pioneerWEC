@@ -2,7 +2,7 @@
 % close all
 % clc
 % 
-load('mcrResRAO_newNew.mat');
+load('mcrRAO_FINAL.mat');
 % 
 % load('obsData/processedDataPS')
 
@@ -66,7 +66,7 @@ else
 
 
     figure()
-    semilogx(1./mcr.cases(:,2),mcr.excForceRMSXY(:,[5])./(mcr.velRMSXY(:,[5])*180/pi),'-k')
+    loglog(1./mcr.cases(:,2),mcr.excForceRMSXY(:,[5])./(mcr.velRMSXY(:,[5])*180/pi),'-k')
     ylabel(strcat('Pitch Impedance Magnitude (Nms/',char(176),')'))
     xlabel('Frequency (Hz)')
     xlim([.1, .5])

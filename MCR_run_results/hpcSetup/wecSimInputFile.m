@@ -10,80 +10,72 @@ simu.rampTime  = 0.05*simu.endTime;           % Wave Ramp Time [s]
 %%% Note from Dom: ode23t or other mod stiff tends to work better with the inverse trig
 %%% functions in custom mooring and the cable approximation. 
 simu.solver    = 'ode23t';                    % simu.solver = 'ode4' for fixed step & simu.solver = 'ode45' for variable step 
-simu.dt        = 0.05; 					  	 % Simulation time-step [s]
+simu.dt        = 0.1; 					  	 % Simulation time-step [s]
 simu.cicEndTime = 30;
 simu.mcrMatFile = 'mcrCases.mat';
+simu.mode = 'normal';
 
 %% Wave Information 
 
-% % Irregular Waves using JS Spectrum with Equal Energy and Seeded Phase
-% waves = waveClass('irregular');           % Initialize Wave Class and Specify Type
-% waves.height = 1.5;                       % Significant Wave Height [m]
-% waves.period = 7.7;                         % Peak Period [s]
-% waves.spectrumType = 'JS';                % Specify Wave Spectrum Type
-% waves.bem.option = 'EqualEnergy';         % Uses 'EqualEnergy' bins (default) 
-% waves.phaseSeed = 1;                      % Phase is seeded so eta is the same
-% waves.waterDepth = 30;
-% waves.direction = [320, 0 20];
-% waves.spread = [.1, .5, .4];
-% waves.current.option = 1;
-% waves.current.speed = .05;
-
-addpath('obsData')
 waveNum = 1;
-waveFiles = {'obsData/spectrumFile197.mat' 'obsData/spectrumFile422.mat' 'obsData/spectrumFile141.mat' 'obsData/spectrumFile332.mat'};
-waveDirs = [252.0421   56.5412  285.4639   97.5443];
 
-waves = waveClass('spectrumImport');      % Create the Wave Variable and Specify Type
-waves.spectrumFile = string(waveFiles(waveNum));  % Name of User-Defined Spectrum File 202 313 349 419
-waves.direction = waveDirs(waveNum); % 240.9309   48.4308  107.6652  108.3043
+snips = [197 422 141 332];
+waveDirs = [251.6885   52.1207  285.5564   96.5309];
+
+waveFiles = ["obsData/dirSpectrum_197.mat" "obsData/dirSpectrum_422.mat" "obsData/dirSpectrum_141.mat" "obsData/dirSpectrum_332.mat"];
+
+waves = waveClass('spectrumImportFullDir');
+waves.direction = waveDirs(waveNum); 
+waves.spectrumFile = (waveFiles(waveNum));
+waves.freqDepDirection.nBins = 10; % for example
+waves.freqDepDirection.spreadRange = 2; % for example
 waves.waterDepth = 30;
-waves.phaseSeed = 1;                      % Phase is seeded so eta is the same
-
-excFiles = {'obsData/excitationForceWave1.mat' 'obsData/excitationForceWave2.mat' 'obsData/excitationForceWave3.mat' 'obsData/excitationForceWave4.mat'};
-load(string(excFiles(waveNum)));
-
-% Regular waves
-% waves = waveClass('regularCIC');           % Initialize Wave Class and Specify Type
-% waves.height = 1;                       % Significant Wave Height [m]
-% waves.period = 8; %:.25:10;                         % Peak Period [s]
-% waves.waterDepth = 30;
-% waves.direction = 0;
+waves.phaseSeed = 1;
 
 waves.current.option = 1;
 waves.current.speed = .05;
 waves.current.direction = 270;
 
+%% initial position (as a result of mooring scope)
+L0 = 15+19.8;
+surgeDisp = sqrt(L0^2 - 20.5^2);
+xLoc = surgeDisp*cosd(waveDirs(waveNum));
+yLoc = surgeDisp*sind(waveDirs(waveNum));
+
 %% Body Data
 % Float
-body(1)              = bodyClass('./hydrodata_SNL/wamitIRR1L1PCGCubitv2/wec_and_nsif_clean_cb_corrected.h5');  
+body(1)              = bodyClass('./hydroData/wec_and_nsif_clean_cb_corrected.h5');  
 % this h5 file is cleaned BEM EXCEPT:
 % Body 1 CB adjusted based upon buoy diagram because the box modeled in BEM as
 % solid geometry
 % hydrostatic stiffness = 1000 N*m/rad added for each body in YAW
 
-% calculate the flooded box mass and inertia
+% calculate the flooded box mass and inertia - NOT USED in final model
 boxVol = 1.3557^2*0.7493;
 boxMass = boxVol*1025;
 cgToBox = 1.016 - .218 + .7493/2;
 boxInertia = boxMass*cgToBox;
 
-% body(1).geometryFile = './geometry/float.stl';    
+body(1).geometryFile = './geometry/pnr_with_box.stl';    
 body(1).mass         = 3747; %'equilibrium';   +boxMass            
-body(1).inertia      = [7484 7484 1025*7.6135596];  % provided inertia in roll/pitch...unsure about yaw inertia +boxInertia
+body(1).inertia      = [7484 7484 1500];  % provided inertia in roll/pitch...unsure about yaw inertia +boxInertia
 body(1).quadDrag.area = [2.5553 2.5553 8.5634 8.5634 8.5634 1.0768];
 cdSurge = 4;
 cdHeave = 0.5;
 cdPitch = 1;
 body(1).quadDrag.cd = [cdSurge, cdSurge, cdHeave, cdPitch, cdPitch, 0.5];
 body(1).meanDrift = 2;
+% body(1).nonlinearHydro = 2;
+body(1).initial.displacement = [xLoc, yLoc, 0];
+body(1).yaw.option = 1;
+body(1).yaw.threshold = 2;
 
-aboveWaterMass = 20; % kg, above water mass, 1 m above CG (does NOT affect hydrostatics)
-aboveWaterMassLoc = [0 0 1]; %30*tan(mooringAngle)
+aboveWaterMass = 0; % kg, above water mass, 1 m above CG (does NOT affect hydrostatics)
+aboveWaterMassLoc = [xLoc yLoc 1]; %30*tan(mooringAngle)
 
 % NSIF
 body(2)              = bodyClass('');        
-% body(2).geometryFile = './geometry/NSIF.stl';  
+body(2).geometryFile = './geometry/NSIF.stl';  
 body(2).nonHydro = 2;                               % this is a DRAG body)
 % body(2).mass         = 320;     % static mass + added from BEM
 % body(2).volume       = 160/1025; % Calculated from static wet mass + added in heave
@@ -101,6 +93,7 @@ body(2).hydroStiffness(3:end,3:end) = [1.0990e-07, 2.4357e-04, -4.6197e-05, 0;
                                         2.4357e-04, -0.8268, -1.8562e-04, 0;
                                         -4.6197e-05, -1.8562e-04, -0.8270, 0;
                                         0, 0, 0, 0.9950];
+body(2).initial.displacement = [xLoc, yLoc, 0];
 
 % body(2).morisonElement.option = 1;  
 % body(2).morisonElement.cd = [0.5; 0.5; 0.5].';
@@ -115,7 +108,7 @@ body(2).hydroStiffness(3:end,3:end) = [1.0990e-07, 2.4357e-04, -4.6197e-05, 0;
 % NOTE: the mass of the added cable elements DOES affect hydrostatics,but
 % this effect is small. 
 body(3) = bodyClass('');
-% body(3).geometryFile = './geometry/sphere_out.stl';
+body(3).geometryFile = './geometry/sphere_out.stl';
 body(3).nonHydro = 2;
 body(3).quadDrag.area = 2 * 0.0254 .* ones([1,6]); % approxd as 2m cylinder of 1" diameter
 body(3).quadDrag.area(6) = 20* 2 * 0.0254;
@@ -127,9 +120,10 @@ body(3).centerGravity = [0,0,-2.686975];                               % the top
 body(3).centerBuoyancy = [0,0,-2.686975];
 body(3).inertia = [(1/12)*body(3).mass * (3*0.0127^2 + 2) (1/12)*body(3).mass * (3*0.0127^2 + 2) ...
     (1/2)*body(3).mass * 0.0127^2];
+body(3).initial.displacement = [xLoc, yLoc, 0];
 
 body(4) = bodyClass('');
-% body(4).geometryFile = './geometry/sphere_out.stl';
+body(4).geometryFile = './geometry/sphere_out.stl';
 body(4).nonHydro = 2;
 body(4).quadDrag.area = 20*2 * 0.0254 .* ones([1,6]);
 %body(4).quadDrag.area(6) = 0;
@@ -141,6 +135,7 @@ body(4).centerGravity = [0,0,-5.562325];                               % the bot
 body(4).centerBuoyancy = [0,0,-5.562325];
 body(4).inertia = [(1/12)*body(4).mass * (3*0.0127^2 + 2) (1/12)*body(4).mass * (3*0.0127^2 + 2) ...
     (1/2)*body(4).mass * 0.0127^2];
+body(4).initial.displacement = [xLoc, yLoc, 0];
 
 %% PTO and Constraint Parameters
 % Floating (6DOF) Joint
@@ -162,39 +157,27 @@ pto(1) = ptoClass('pto1');
 pto(1).damping = jointDamping;
 pto(1).stiffness = jointStiffness;
 pto(1).location = [0 0 -1.2493]; % bottom of instrumentation cage based on engineering drawing
+pto(1).initial.displacement = [xLoc, yLoc, 0];
 
 pto(2) = ptoClass('pto2');
 pto(2).damping = jointDamping;
 pto(2).stiffness = jointStiffness;
 pto(2).location = [0 0 -4.12465]; % somewhere in the middle of the cable, between the two body elements above
+pto(2).initial.displacement = [xLoc, yLoc, 0];
 
 pto(3) = ptoClass('pto3');
 pto(3).damping = jointDamping;
 pto(3).stiffness = jointStiffness;
 pto(3).location = [0 0 -7]; % assumed attached to approx top of NSIF
+pto(3).initial.displacement = [xLoc, yLoc, 0];
 
 %%
 % pioneersim.moorK    = 2e2;
 % pioneersim.moorC    = 1e3;
 mooring(1)  = mooringClass('mooring');
 mooring(1).location = [0.0 0.0 -9.500]; % assumed attached to approx bottom of NSIF
+mooring(1).initial.displacement = [xLoc, yLoc, 0];
 
 % mooring 
-L0 = 15+19.8; % equilibrium length: make sure this is mooring.location + waves.waterDepth
+L0 = 15+19.8; % equilibrium length
 polyNom = 1.0e+04*[1.9488   -0.0390   -1.3588    0.8094   -0.0004]; % polynomial definition
-
-% initial position (as a result of mooring scope) - this is overridden in initializeWecSim when the mcr is loaded in
-surgeDisp = sqrt(L0^2 - 20.5^2);
-xLoc = surgeDisp*cosd(waveDirs(waveNum));
-yLoc = surgeDisp*sind(waveDirs(waveNum));
-
-% set initial displacement for bodies, ptos, and moorings
-body(1).initial.displacement = [xLoc, yLoc, 0];
-body(2).initial.displacement = [xLoc, yLoc, 0];
-body(3).initial.displacement = [xLoc, yLoc, 0];
-body(4).initial.displacement = [xLoc, yLoc, 0];
-pto(1).initial.displacement = [xLoc, yLoc, 0];
-pto(2).initial.displacement = [xLoc, yLoc, 0];
-pto(3).initial.displacement = [xLoc, yLoc, 0];
-mooring(1).initial.displacement = [xLoc, yLoc, 0];
-aboveWaterMassLoc = [xLoc yLoc 1];

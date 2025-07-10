@@ -4,7 +4,7 @@ load('NED_IMU.mat')
 load('dataWaves.mat')
 
 % runs from Jantzen
-snips = [197 422 141 332];
+snips = [197]; %  422 141 332
 
 for ii = 1:length(snips)
     startTimes(ii) = NED_IMU.Time(NED_IMU.Info.StartIndex(snips(ii)));
@@ -74,4 +74,4 @@ for ii = 1:length(snips)
     legend('acc','vel','gyrPos')
 end
 
-save processedDataPS.mat processedData
+% save processedDataPS.mat processedData

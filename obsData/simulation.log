@@ -12,4 +12,10 @@ evalin('caller', strcat(script, ';'));
 Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('wecSim', 'C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSim.m', 40)" style="font-weight:bold">wecSim</a> (<a href="matlab: opentoline('C:\Users\jtgrasb\Documents\GitHub\WEC-Sim\source\wecSim.m',40,0)">line 40</a>)
 run('initializeWecSim');
 } 
+wecSimInputFile
+WEC-Sim: An open-source code for simulating wave energy converters
+Version: 6.1.2
+
+Initializing the Simulation Class...
+	Case Dir: C:\Users\jtgrasb\Documents\GitHub\pioneerSNL\checkHPC 
 wecSim

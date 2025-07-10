@@ -31,11 +31,17 @@ output.plotForces(1,5);
 %     'timesPerFrame',5,'axisLimits',[-150 150 -150 150 -50 20],...
 %     'startEndTime',[100 125]);
 
-% plot pendulum position and spring torque
-figure()
-plot(RelativeAngle.time,RelativeAngle.signals.values)
-hold on
-yyaxis right
-plot(springAndMotorTorque,'--')
-legend('Angle','Torque')
+% expected force
+% theoreticalSpringForce = -springStiffness10.*RelativeAngle.signals.values;
+% theoreticalPTOForce = -ptoDamping.*RelativeVelocity.signals.values/(gearRatio*beltGearRatio);
+% theoreticalForce = theoreticalSpringForce + theoreticalPTOForce;
+% 
+% % plot pendulum position and spring torque
+% figure()
+% plot(RelativeAngle.time,RelativeAngle.signals.values)
+% hold on
+% yyaxis right
+% plot(springAndMotorTorque,'--')
+% plot(RelativeAngle.time,theoreticalForce,':k')
+% legend('Angle','Torque','Theoretical (no fric)')
 

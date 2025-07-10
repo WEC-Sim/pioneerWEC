@@ -26,6 +26,9 @@ codegen/
 
 # Simulink cache files
 *.slxc
+**/output/
+**/output_previous/
+**/slprj/
 
 # Octave session info
 octave-workspace
@@ -34,5 +37,4 @@ hydrodata_SNL/wamitIRR1L1PCGCubitv2/bemio_out.asv
 obsData/NED_IMU.mat
 minTunedModel/obsData/NED_IMU.mat
 minTunedModel.zip
-/addPTO/output
 addPTO/simulation.log

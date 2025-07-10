@@ -35,6 +35,7 @@ for jj = 1:length(files)
         mcrNew.cdSurge(fileCount) = body(1).quadDrag.cd(1);
         mcrNew.cdHeave(fileCount) = body(1).quadDrag.cd(3);
         mcrNew.cdPitch(fileCount) = body(1).quadDrag.cd(5);
+        mcrNew.cdYaw(fileCount) = body(1).quadDrag.cd(6);
         mcrNew.xLoc(fileCount) = xLoc;
         mcrNew.yLoc(fileCount) = yLoc;
   

@@ -1,4 +1,4 @@
-close all
+% close all
 
 output.plotResponse(1,1)
 output.plotResponse(1,2)

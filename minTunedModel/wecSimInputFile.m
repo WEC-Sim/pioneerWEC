@@ -16,25 +16,25 @@ simu.mcrMatFile = 'mcrCases.mat';
 
 %% Wave Information 
 
-% % Irregular Waves using JS Spectrum with Equal Energy and Seeded Phase
-% waves = waveClass('irregular');           % Initialize Wave Class and Specify Type
-% waves.height = 1.5;                       % Significant Wave Height [m]
-% waves.period = 7.7;                         % Peak Period [s]
-% waves.spectrumType = 'JS';                % Specify Wave Spectrum Type
-% waves.bem.option = 'EqualEnergy';         % Uses 'EqualEnergy' bins (default) 
-% waves.phaseSeed = 1;                      % Phase is seeded so eta is the same
-% waves.waterDepth = 30;
-% waves.direction = [320, 0 20];
-% waves.spread = [.1, .5, .4];
-% waves.current.option = 1;
-% waves.current.speed = .05;
-
 % Regular waves - run MCR for RAO
 waves = waveClass('regularCIC');           % Initialize Wave Class and Specify Type
 waves.height = 1;                       % Significant Wave Height [m]
 waves.period = 8;                         % Peak Period [s]
 waves.waterDepth = 30;
 waves.direction = 0;
+
+% % Load in full direcitonal spectrum data
+% waveNum = 1;
+% snips = [197 422 141 332];
+% waveDirs = wrapTo360([-108.3115   52.1207  -74.4436   96.5309]);
+% waveFiles = ["obsData/dirSpectrum_197.mat" "obsData/dirSpectrum_422.mat" "obsData/dirSpectrum_141.mat" "obsData/dirSpectrum_332.mat"];
+% waves = waveClass('spectrumImportFullDir');
+% waves.direction = waveDirs(waveNum); 
+% waves.spectrumFile = (waveFiles(waveNum));
+% waves.freqDepDirection.nBins = 10; % for example
+% waves.freqDepDirection.spreadRange = 2; % for example
+% waves.waterDepth = 30;
+% waves.phaseSeed = 1;
 
 % waves.current.option = 1; % turn current on/off
 % waves.current.speed = .05;
@@ -59,7 +59,7 @@ yLoc = surgeDisp*sind(waves.direction);
 
 %% Body Data
 % Float
-body(1)              = bodyClass('./hydroData/wec_and_nsif_clean_cb_corrected.h5');  
+body(1)              = bodyClass('./hydroData/wec_and_nsif_clean_cb_corrected_340.h5');  
 % this h5 file is cleaned BEM EXCEPT:
 % Body 1 CB adjusted based upon buoy diagram because the box modeled in BEM as
 % solid geometry
@@ -73,17 +73,20 @@ boxInertia = boxMass*cgToBox;
 
 body(1).geometryFile = './geometry/pnr_with_box.stl';    
 body(1).mass         = 3747; %'equilibrium';   +boxMass            
-body(1).inertia      = [7484 7484 1025*7.6135596];  % provided inertia in roll/pitch...unsure about yaw inertia +boxInertia
+body(1).inertia      = [7484 7484 1500];  % provided inertia in roll/pitch...unsure about yaw inertia +boxInertia
 body(1).quadDrag.area = [2.5553 2.5553 8.5634 8.5634 8.5634 1.0768];
-cdSurge = 4;
+cdSurge = 6;
 cdHeave = 0.5;
-cdPitch = 1;
-body(1).quadDrag.cd = [cdSurge, cdSurge, cdHeave, cdPitch, cdPitch, 0.5];
+cdPitch = 1.5;
+cdYaw = 8;
+body(1).quadDrag.cd = [cdSurge, cdSurge, cdHeave, cdPitch, cdPitch, cdYaw];
 body(1).meanDrift = 2;
 % body(1).nonlinearHydro = 2;
 body(1).initial.displacement = [xLoc, yLoc, 0];
+body(1).yaw.option = 1;
+body(1).yaw.threshold = 2;
 
-aboveWaterMass = -20; % kg, above water mass, 1 m above CG (does NOT affect hydrostatics)
+aboveWaterMass = 0; % kg, above water mass, 1 m above CG (does NOT affect hydrostatics)
 aboveWaterMassLoc = [xLoc yLoc 1]; %30*tan(mooringAngle)
 
 % NSIF
@@ -194,4 +197,3 @@ mooring(1).initial.displacement = [xLoc, yLoc, 0];
 % mooring 
 L0 = 15+19.8; % equilibrium length
 polyNom = 1.0e+04*[1.9488   -0.0390   -1.3588    0.8094   -0.0004]; % polynomial definition
-

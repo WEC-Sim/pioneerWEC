@@ -3,7 +3,6 @@
 % find 100 s
 [~,startInd] = min(abs(100-output.bodies(1).time));
 
-
 mcr.posRMS(imcr,:) = rms(output.bodies(1).position(startInd:end,:));
 mcr.velRMS(imcr,:) = rms(output.bodies(1).velocity(startInd:end,:));
 mcr.accRMS(imcr,:) = rms(output.bodies(1).acceleration(startInd:end,:));

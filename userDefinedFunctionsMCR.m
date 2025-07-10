@@ -1,8 +1,17 @@
 %% User Defined Functions for MCR run
 
 % find 100 s
-[~,startInd] = min(abs(100-output.bodies(1).time));
+[~,startInd] = min(abs(.1-output.bodies(1).time));
 
+mcr.waveHeight(imcr) = waves.height;
+mcr.wavePeriod(imcr) = waves.period;
+mcr.waveDirection(imcr) = waves.direction;
+mcr.waveDirection_MCR(imcr) = waveDir;
+mcr.aboveWaterMass(imcr) = aboveWaterMass;
+mcr.cdSurge(imcr) = body(1).quadDrag.cd(1);
+mcr.cdHeave(imcr) = body(1).quadDrag.cd(3);
+mcr.cdPitch(imcr) = body(1).quadDrag.cd(5);
+mcr.cdYaw(imcr) = body(1).quadDrag.cd(6);
 mcr.xLoc(imcr) = xLoc;
 mcr.yLoc(imcr) = yLoc;
 

@@ -2,21 +2,22 @@ clear
 close all
 clc
 
-waveFiles = string({'obsData/spectrumFile197.mat' 'obsData/spectrumFile422.mat' 'obsData/spectrumFile141.mat' 'obsData/spectrumFile332.mat'});
-waveDirs = [252.0421   56.5412  285.4639   97.5443];
-excFiles = ["obsData/excitationForceWave1.mat", "obsData/excitationForceWave2.mat", "obsData/excitationForceWave3.mat", "obsData/excitationForceWave4.mat"];
-initDirCorrections = [-60 -120 220 -40];
+waveFiles = ["obsData/dirSpectrum_197.mat" "obsData/dirSpectrum_422.mat" "obsData/dirSpectrum_141.mat" "obsData/dirSpectrum_332.mat"];
+waveDirs = wrapTo360([-108.3115   52.1207  -74.4436   96.5309]);
+
+L0 = 15+19.8;
+surgeDisp = sqrt(L0^2 - 20.5^2);
 
 for ii = 1:4
-	fileVec(ii) = string(waveFiles(ii));
+	fileVec(ii) = waveFiles(ii);
 	dirVec(ii) = waveDirs(ii);
-    initDirVec(ii) = initDirCorrections(ii);
-    excFileVec(ii) = string(excFiles(ii));
+    xLoc(ii) = surgeDisp*cosd(waveDirs(ii));
+    yLoc(ii) = surgeDisp*sind(waveDirs(ii));
 end
 
 mcr = struct();
-mcr.header = ["LoadFile","waveDir","initDirCorrection"];
-mcr.cases = [excFiles', dirVec',initDirVec'];
+mcr.header = ["waves.spectrumFile","waveDir","xLoc","yLoc"];
+mcr.cases = [[fileVec'],[dirVec'],[xLoc'],[yLoc']];
 
 %%
 save mcrCases mcr

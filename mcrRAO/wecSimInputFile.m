@@ -13,6 +13,7 @@ simu.solver    = 'ode23t';                    % simu.solver = 'ode4' for fixed s
 simu.dt        = 0.05; 					  	 % Simulation time-step [s]
 simu.cicEndTime = 30;
 % simu.mcrMatFile = 'mcrCases.mat';
+totalNumOfWorkers = 1; % reload hydro data
 
 %% Wave Information 
 
@@ -79,7 +80,7 @@ yLoc = surgeDisp*sind(waves.direction);
 
 %% Body Data
 % Float
-body(1)              = bodyClass('./hydrodata/wec_and_nsif_clean_cb_corrected.h5');  
+body(1)              = bodyClass('./hydrodata/wec_and_nsif_clean_cb_corrected_340.h5');  
 % this h5 file is cleaned BEM EXCEPT:
 % Body 1 CB adjusted based upon buoy diagram because the box modeled in BEM as
 % solid geometry
@@ -93,17 +94,20 @@ boxInertia = boxMass*cgToBox;
 
 body(1).geometryFile = './geometry/pnr_with_box.stl';    
 body(1).mass         = 3747; %'equilibrium';   +boxMass            
-body(1).inertia      = [7484 7484 1025*7.6135596];  % provided inertia in roll/pitch...unsure about yaw inertia +boxInertia
+body(1).inertia      = [7484 7484 1500];  % provided inertia in roll/pitch...unsure about yaw inertia +boxInertia
 body(1).quadDrag.area = [2.5553 2.5553 8.5634 8.5634 8.5634 1.0768];
-cdSurge = 4;
+cdSurge = 6;
 cdHeave = 0.5;
-cdPitch = 1;
-body(1).quadDrag.cd = [cdSurge, cdSurge, cdHeave, cdPitch, cdPitch, 0.5];
+cdPitch = 1.5;
+cdYaw = 1.5;
+body(1).quadDrag.cd = [cdSurge, cdSurge, cdHeave, cdPitch, cdPitch, cdYaw];
 body(1).meanDrift = 2;
 % body(1).nonlinearHydro = 2;
 body(1).initial.displacement = [xLoc, yLoc, 0];
+body(1).yaw.option = 1;
+body(1).yaw.threshold = 2;
 
-aboveWaterMass = 20; % kg, above water mass, 1 m above CG (does NOT affect hydrostatics)
+aboveWaterMass = 0; % kg, above water mass, 1 m above CG (does NOT affect hydrostatics)
 aboveWaterMassLoc = [xLoc yLoc 1]; %30*tan(mooringAngle)
 
 % NSIF

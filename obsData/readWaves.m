@@ -3,7 +3,7 @@ close all
 clc
 
 load('dataWaves.mat')
-load('NED_IMU.mat')
+load('NED_IMU_Info.mat')
 
 % runs from Jantzen
 snips = [197 422 141 332];
@@ -11,14 +11,13 @@ nBins = 10; % this is the number of direction bins (recommend odd number)
 processedData = {};
 
 fileTime = ncread('./all_comparison/ooiSpectra-mab/WSS_MARK.nc','time'); %WSS_MARK
-Hm0 = ncread('./all_comparison/ooiSpectra-mab/WSS_MARK.nc','significant_wave_height');
 
 rho = 1000;
 g = 9.81;
 
 for ii = 1:length(snips)
-    startTimes(ii) = NED_IMU.Time(NED_IMU.Info.StartIndex(snips(ii)));
-    endTimes(ii) = NED_IMU.Time(NED_IMU.Info.EndIndex(snips(ii)));
+    startTimes(ii) = NED_IMU_Info.Time(NED_IMU_Info.Info.StartIndex(snips(ii)));
+    endTimes(ii) = NED_IMU_Info.Time(NED_IMU_Info.Info.EndIndex(snips(ii)));
     [~,waveIndex(ii)] = min(abs(dataWaves.preferred_time-mean([startTimes(ii),endTimes(ii)])));
 
     [~,fileWaveIndex(ii)] = min(abs(fileTime-mean([startTimes(ii),endTimes(ii)])));
@@ -40,7 +39,7 @@ for ii = 1:length(snips)
     dirSpread(abs(dirSpread(:,ii))>1e3,ii) = 0;
     dirSpread(isnan(dirSpread(:,ii)),ii) = 0;
 
-    dirWaves(dirWaves(:,ii)>320,ii) = dirWaves(dirWaves(:,ii)>320,ii) - 360;
+    dirWaves(dirWaves(:,ii)>340,ii) = dirWaves(dirWaves(:,ii)>340,ii) - 360;
 
     subplot(3,1,2)
     plot(dataWaves.freq_Hz(:,waveIndex(ii)),dirWaves(:,ii))
@@ -59,76 +58,7 @@ for ii = 1:length(snips)
 
     spectrumData(:,1) = dataWaves.freq_Hz(:,waveIndex(ii));
     spectrumData(:,2) = psd(:,ii);
-    
-    % save(['spectrumFile' num2str(snips(ii)) '.mat'],'spectrumData')
 
-    % extract and process IMU data
-    processedData{ii}.NEDTime = NED_IMU.Time(NED_IMU.Info.StartIndex(snips(ii)):NED_IMU.Info.EndIndex(snips(ii))) - NED_IMU.Time(NED_IMU.Info.StartIndex(snips(ii)));
-    [~,startIndVel] = min(abs(100-processedData{ii}.NEDTime));
-    [~,startIndPos] = min(abs(200-processedData{ii}.NEDTime));
-
-    % convert to x-y axes consistent with wave direction:
-    waveAngleN = avgDir(ii);
-
-    processedData{ii}.NEDTimeVel = processedData{ii}.NEDTime(startIndVel:end);
-    processedData{ii}.NEDTimePos = processedData{ii}.NEDTime(startIndPos:end);
-    
-    % because north is x and east is y, they need to be flipped to be
-    % consistent with WEC-Sim
-    NED_IMU.Acc = NED_IMU.Acc(:,[2 1 3]);
-    NED_IMU.Alpha = NED_IMU.Alpha(:,[2 1 3]);
-    NED_IMU.Gyr = NED_IMU.Gyr(:,[2 1 3]);
-
-    processedData{ii}.NEDAcc = NED_IMU.Acc(NED_IMU.Info.StartIndex(snips(ii)):NED_IMU.Info.EndIndex(snips(ii)),:)*rotz(waveAngleN);
-    processedData{ii}.NEDGyrAcc = NED_IMU.Alpha(NED_IMU.Info.StartIndex(snips(ii)):NED_IMU.Info.EndIndex(snips(ii)),:)*rotz(waveAngleN);
-    processedData{ii}.NEDGyrVel = NED_IMU.Gyr(NED_IMU.Info.StartIndex(snips(ii)):NED_IMU.Info.EndIndex(snips(ii)),:)*rotz(waveAngleN);
-    processedData{ii}.NEDGyrVel = processedData{ii}.NEDGyrVel(startIndVel:end,:);
-
-    processedData{ii}.NEDAccSTD = std(NED_IMU.Acc(NED_IMU.Info.StartIndex(snips(ii)):NED_IMU.Info.EndIndex(snips(ii)),:))*rotz(waveAngleN);
-    processedData{ii}.NEDGyrAccSTD = std(NED_IMU.Alpha(NED_IMU.Info.StartIndex(snips(ii)):NED_IMU.Info.EndIndex(snips(ii)),:))*rotz(waveAngleN);
-    processedData{ii}.NEDGyrVelSTD = std(processedData{ii}.NEDGyrVel);
-
-    dt = processedData{ii}.NEDTime(2) - processedData{ii}.NEDTime(1);
-    % High Pass filter the accelerometer data to get less drift
-    d = designfilt('highpassfir', ...       % Response type
-        'StopbandFrequency',0.025, ...     % Frequency constraints
-        'PassbandFrequency',0.05, ...
-        'DesignMethod','kaiserwin', ...  % Design method
-        'SampleRate',1/dt);               % Sample rate
-
-    vel = cumtrapz(processedData{ii}.NEDTime,processedData{ii}.NEDAcc(:,:));
-    velNew = filtfilt(d,vel);
-    pos = cumtrapz(processedData{ii}.NEDTime,velNew);
-    posNew = filtfilt(d,pos);
-
-    gyrVel = cumtrapz(processedData{ii}.NEDTime,processedData{ii}.NEDGyrAcc(:,:));
-    gyrVelNew = filtfilt(d,gyrVel);
-    gyrPos = cumtrapz(processedData{ii}.NEDTime,gyrVelNew);
-    gyrPosNew = filtfilt(d,gyrPos);
-
-    processedData{ii}.NEDVel = velNew;
-    processedData{ii}.NEDPos = posNew;
-    processedData{ii}.NEDVelSTD = std(velNew);
-    processedData{ii}.NEDPosSTD = std(posNew);
-    processedData{ii}.NEDGyrPos = gyrPosNew;
-    processedData{ii}.NEDGyrPosSTD = std(gyrPosNew);
-
-    disp([processedData{ii}.NEDVelSTD([1 3]),processedData{ii}.NEDGyrVelSTD(2)])
-    % 
-    % figure()
-    % plot(processedData{ii}.NEDTime,vel)
-    % hold on
-    % plot(processedData{ii}.NEDTime,velNew)
-    % 
-    % figure()
-    % plot(processedData{ii}.NEDTime,pos)
-    % hold on
-    % plot(processedData{ii}.NEDTime,posNew)
-    % 
-    % figure()
-    % plot(processedData{ii}.NEDTime,gyrPos)
-    % hold on
-    % plot(processedData{ii}.NEDTime,gyrPosNew)
 
 end
 
@@ -162,7 +92,7 @@ for ii = 1:4
     hydroData = readBEMIOH5('../hydrodata_SNL/wamitIRR1L1PCGCubitv2/wec_and_nsif_clean.h5',1,2);
     body(1) = bodyClass('../hydrodata_SNL/wamitIRR1L1PCGCubitv2/wec_and_nsif_clean.h5');
     %hydroForcePre(body,body.hydroData.simulation_parameters.w,body.hydroData.simulation_parameters.direction,30,
-    loadHydroData(body,hydroData);
+    loadHydroData(body,hydroData,1);
     % example first wave snippet
     [WGRD,DGRD]=meshgrid(body.hydroData.simulation_parameters.w,[body.hydroData.simulation_parameters.direction, 360]);  % wrap 0 to 360 degrees
     for k=1:length(2*pi*dataWaves.freq_Hz(~isnan(dataWaves.dirMeanToNorth_deg(:,waveIndex(waveNum))),waveIndex(waveNum)))
@@ -179,6 +109,7 @@ for ii = 1:4
     end
     % rotate bins to WEC-Sim frame here
     dirBins = 360-(dirBins + 90); % flip direction (CW to CCW) and add 90 to be with respect to E
+    dirBins = wrapTo360(dirBins);
     
     Wq = repmat(2*pi*dataWaves.freq_Hz(~isnan(dataWaves.dirMeanToNorth_deg(:,waveIndex(waveNum))),waveIndex(waveNum)),[1,nBins-1]);
     % wrap excitation coefficients to 360
