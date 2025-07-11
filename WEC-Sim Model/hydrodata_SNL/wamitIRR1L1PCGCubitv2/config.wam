@@ -1,6 +1,0 @@
- RAMGBMAX=256.0     (max 6GB RAM)
- NCPU=16           (4 CPUS on Adam's laptop)
- USERID_PATH=/usr/netpub/WAMIT/
- LICENSE_PATH=/usr/netpub/WAMIT/
- ILOG=1           (1, integrate log singularity by default)
- INUMOPT5=1       (1, separate radiation and diff components in output)

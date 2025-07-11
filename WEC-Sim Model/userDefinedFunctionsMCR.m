@@ -76,43 +76,6 @@ save(['outputSS',num2str(imcr),'.mat'],'output')
 
 if imcr == length(mcr.cases)
     
-    save('mcrResPCT.mat')
+    save('mcrRes.mat')
     
-    % figure()
-    % plot(mcr.cases(:,2),mcr.posAmpXY(:,[1]),'-.k')
-    % hold on
-    % plot(mcr.cases(:,2),mcr.posAmpXY(:,[3]),'--k')
-    % plot(mcr.cases(:,2),mcr.posAmpXY(:,[5]),'-k')
-    % ylabel('Response (m or rad)')
-    % xlabel('Period (s)')
-    % legend({'Surge','Heave','Pitch'})
-
-    % figure()
-    % plot(mcr.cases(:,2),mcr.posAmpXY(:,[5])*180/pi,'-k')
-    % ylabel(strcat('Pitch Response (',char(176),')'))
-    % xlabel('Period (s)')
-
-    % set(gcf, 'PaperPosition', [0 0 5 4])
-    % set(gcf, 'PaperSize', [5 4])
-    % print(gcf, strcat('./paperFigs/RAO.pdf'), '-dpdf', '-fillpage','-r1000','-image')
-
-    % figure()
-    % plot(mcr.cases(:,2),mcr.velAmpXY(:,[1])./mcr.excForceAmpXY(:,[1]),'-.k')
-    % hold on
-    % plot(mcr.cases(:,2),mcr.velAmpXY(:,[3])./mcr.excForceAmpXY(:,[3]),'--k')
-    % plot(mcr.cases(:,2),mcr.velAmpXY(:,[5])./mcr.excForceAmpXY(:,[5]),'-k')
-    % ylabel('Impedance (m/Ns)')
-    % xlabel('Period (s)')
-    % legend({'Surge','Heave','Pitch'})
-
-    %freqs = 
-
-    % figure()
-    % semilogx(1./mcr.cases(:,2),mcr.excForceAmpXY(:,[5])./(mcr.velAmpXY(:,[5])*180/pi),'-k')
-    % ylabel(strcat('Pitch Impedance Magnitude (Nms/',char(176),')'))
-    % xlabel('Frequency (Hz)')
-    
-    % set(gcf, 'PaperPosition', [0 0 5 4])
-    % set(gcf, 'PaperSize', [5 4])
-    % print(gcf, strcat('./paperFigs/Impedance.pdf'), '-dpdf', '-fillpage','-r1000','-image')
 end

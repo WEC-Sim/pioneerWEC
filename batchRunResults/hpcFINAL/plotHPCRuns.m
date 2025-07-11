@@ -58,7 +58,7 @@ end
 
 % compare the rms for each run to the standard deviations
 % from the observed data
-load('../../obsData/processedDataPS')
+load('../../WEC-Sim Model/obsData/processedDataPS')
 for ii = 1:length(processedData) % the observed data has the preferred axis rotation as the 4th element, so we need to rotate 90 degrees to be consistent with the MCR results
     processedData{ii}.rmsTransPS = abs(processedData{ii}.rmsTransPS*rotz(90));
     processedData{ii}.rmsRotPS = abs(processedData{ii}.rmsRotPS*rotz(90));
@@ -121,54 +121,6 @@ for ii = 1:length(mcrWave{1}.aboveWaterMass)
     overallError(ii) = mean([mcrWave{1}.velObjFun(ii),mcrWave{2}.velObjFun(ii),mcrWave{3}.velObjFun(ii),mcrWave{4}.velObjFun(ii)]);
 end
 
-%% Plot each dof with respect to the cd in that dof
-cdList = ["cdSurge","cdHeave","cdPitch"];
-figure('Position', [10 10 400 600])
-for ii = 1:length(DOFs)
-    subplot(3,1,ii)
-    scatter(eval(strcat('mcrWave{1}.',cdList(ii))),errorValDir(:,ii),'ok')
-    xlabel(cdList(ii))
-    ylabel(strcat('Error (%) - ',DOFs(ii)))
-end
-
-figure('Position', [10 10 400 600])
-for ii = 1:length(DOFs)
-    subplot(3,1,ii)
-    scatter(eval(strcat('mcrWave{1}.',cdList(ii))),errorValDirAbs(:,ii),'ok')
-    xlabel(cdList(ii))
-    ylabel(strcat('Absolute Error (%) - ',DOFs(ii)))
-end
-
-%% Plot all dofs in a subplot for each sea state
-
-cdList = ["cdSurge","cdHeave","cdPitch"];
-cdLabels = ["C_{d,surge}","C_{d,heave}","C_{d,pitch}"];
-unitsStr = ["m","m","rad"];
-for ii = 1:4
-    figure('Position', [10 10 400 600])
-    for jj = 1:length(DOFs)
-        subplot(3,1,jj)
-        scatter(eval(strcat('mcrWave{',num2str(ii),'}.',cdList(jj))),errorValWave(:,jj,ii),'ok')
-        xlabel(cdLabels(jj))
-        ylabel(strcat('Error (', unitsStr(jj),')'))
-        yyaxis right
-        ax = gca;
-        ax.YColor = 'k';
-        if jj <= 2
-            ylim(100*[min(errorValWave(:,jj,ii)/processedData{ii}.rmsTransPS(DOFNums(jj))), max(errorValWave(:,jj,ii)/processedData{ii}.rmsTransPS(DOFNums(jj)))])
-        else
-            ylim(100*[min(errorValWave(:,jj,ii)/processedData{ii}.rmsRotPS(DOFNums(jj)-3)), max(errorValWave(:,jj,ii)/processedData{ii}.rmsRotPS(DOFNums(jj)-3))])
-        end
-        ylabel(strcat('% Error'))
-        title(DOFs(jj))
-        xlim([1.5,8.5])
-    end
-    sgtitle(strcat('Sea State: ', num2str(ii))) 
-
-    % set(gcf, 'PaperPosition', [0 0 6 10])
-    % set(gcf, 'PaperSize', [6 10])
-    % print(gcf, strcat('../paperFigs/seaState',num2str(ii),'.pdf'), '-dpdf', '-fillpage','-r1000','-vector')
-end
 
 %% Plot all dofs in a subplot for each sea state - All 4 sea states on 1 plot!
 
@@ -271,23 +223,7 @@ for ii = 1:length(cdList)
         ylim([5 12])
     end
 end
-
-% surgeInd = find(mcrWave{1}.cdSurge == 4);
-% heaveInd = find(mcrWave{1}.cdHeave == 0.5);
-% pitchInd = find(mcrWave{1}.cdPitch == 1);
-% optInds = intersect(intersect(surgeInd, heaveInd),pitchInd);
-% 
-% for ii = 1:4
-%     primaryAxisOpt(ii) = mcrWave{ii}.primaryAxis(optInds(2));
-% end
-
-% subplot(2,2,4)
-% scatter(mcrWave{1}.aboveWaterMass(optInds),errorValSum(optInds,3),'ok','filled')
-% xlabel('Above Water Inertia (kgm^2)')
-% ylabel(strcat('Weighted Error (%)'))
-% title('Pitch')
-%xlim([-22,42])
-% 
+ 
 % set(gcf, 'PaperPosition', [0 0 8 6])
 % set(gcf, 'PaperSize', [8 6])
 % print(gcf, strcat('../../paperFigs/weightedError.pdf'), '-dpdf', '-fillpage','-r1000','-vector')
@@ -324,92 +260,4 @@ ylim([8.75 9.05])
 % set(gcf, 'PaperPosition', [0 0 7 3])
 % set(gcf, 'PaperSize', [7 3])
 % print(gcf, strcat('../../paperFigs/cdYaw.pdf'), '-dpdf', '-fillpage','-r1000','-vector')
-
-%% Find optimal indices
-massInd = find(mcrWave{1}.aboveWaterMass == 20);
-optInd = intersect(optInds, massInd);
-
-for ii = 1:length(mcrWave)
-    disp(mcrWave{ii}.velRMSPS(optInd,:))
-end
-
-%% Plot combinations for all waves and each degree of freedom
-for ii = 1:length(DOFs)
-    for jj = 1:length(tuneVars)
-        figure()
-        scatter(eval(strcat('mcrWave{1}.',tuneVars(jj))),errorValDir(:,ii))
-        xlabel(tuneVars(jj))
-        ylabel(strcat('Mean Absolute Velocity Error (%) - ',DOFs(ii)))
-    end
-end
-
-
-%% Plot best combinations for all waves
-for ii = 1:length(tuneVars)
-    figure()
-    scatter(eval(strcat('mcrWave{',num2str(waveNum),'}.',tuneVars(ii))),overallError)
-    xlabel(tuneVars(ii))
-    ylabel('Mean Absolute Velocity Error (%)')
-    colorbar
-    colormap winter
-end
-
-%% Plot all combinations for mean absolute velocity error
-
-for ii = 1:length(tuneVars)
-    figure('Position', [10 10 900 600])
-    for jj = 1:length(tuneVars)
-
-        ax1 = subplot(2,2,jj);
-        scatter3(eval(strcat('mcrWave{',num2str(waveNum),'}.',tuneVars(ii))),eval(strcat('mcrWave{',num2str(waveNum),'}.',tuneVars(jj))), ...
-            overallError,10,overallError)
-        colormap(gca,"winter")
-        xlabel(tuneVars(ii))
-        ylabel(tuneVars(jj))
-        if ii == 1 || jj == 3
-            zlabel('Mean Absolute Velocity Error (%)')
-        end
-
-    end
-end
-
-%% Plot all combinations for a specific wave
-
-% start by creating surface of 2 variables for pitch response
-figure()
-scatter3(mcrWave{1}.aboveWaterMass,mcrWave{1}.cdSurge,mcrWave{1}.velRMSDiff(:,5),8,abs(mcrWave{1}.velRMSDiff(:,5)))
-xlabel('Above Water Mass (kg)')
-ylabel('Cd Surge')
-colormap(gca,"winter")
-
-for ii = 1:length(DOFs)
-    for jj = 1:length(tuneVars)
-        figure()
-        scatter(eval(strcat('mcrWave{1}.',tuneVars(jj))),mcrWave{waveNum}.velRMSPercentDiff(:,DOFNums(ii)))
-        xlabel(tuneVars(jj))
-        ylabel(strcat('Velocity Error (%) - ',DOFs(ii)))
-        % add in text to specific the value comparison
-    end
-end
-
-% for ii = 1:length(DOFs)
-%     for jj = 1:length(tuneVars)
-%         figure('Position', [10 10 900 600])
-%         numPlots = 1;
-%         for kk = 1:length(tuneVars)
-% 
-%             ax1 = subplot(2,2,numPlots);
-%             scatter3(eval(strcat('mcrWave{',num2str(waveNum),'}.',tuneVars(jj))),eval(strcat('mcrWave{',num2str(waveNum),'}.',tuneVars(kk))), ...
-%                 mcrWave{waveNum}.velStdPercentDiff(:,DOFNums(ii)),10,mcrWave{waveNum}.velStdPercentDiff(:,DOFNums(ii)))
-%             colormap(gca,"winter")
-%             xlabel(tuneVars(jj))
-%             ylabel(tuneVars(kk))
-%             if kk == 1 || kk == 3
-%                 zlabel(strcat(DOFs(ii),' STD % Diff (Observed-WEC-Sim)'))
-%             end
-% 
-%             numPlots = numPlots+1;
-%         end
-%     end
-% end
 
