@@ -33,8 +33,3 @@ codegen/
 # Octave session info
 octave-workspace
 /slprj
-hydrodata_SNL/wamitIRR1L1PCGCubitv2/bemio_out.asv
-WEC-Sim Model/obsData/NED_IMU.mat
-minTunedModel/obsData/NED_IMU.mat
-minTunedModel.zip
-addPTO/simulation.log
