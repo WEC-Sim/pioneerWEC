@@ -16,4 +16,4 @@ This repository contains the numerical model and data used for the above publica
   - phase analysis
 
 Version:
-This model was created in MATLAB R2023b and is compatible with WEC-Sim v6.1.2.
+This model was created in MATLAB R2023b and is compatible with WEC-Sim v7.0.0.
